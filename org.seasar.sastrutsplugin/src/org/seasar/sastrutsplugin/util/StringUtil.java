@@ -73,5 +73,18 @@ public final class StringUtil {
 		chars[0] = Character.toUpperCase(chars[0]);
 		return new String(chars);
 	}
+	
+	/**
+	 * 文字列リテラルをデコードします。
+	 * 
+	 * @param value
+	 *            文字列リテラル
+	 * @return デコード後の文字列
+	 */
+	public static String decodeString(String value) {
+		value = value.replaceAll("(^\"|\"$)", "");
+		value = value.replaceAll("\\\"", "\"");
+		return value;
+	}
 
 }

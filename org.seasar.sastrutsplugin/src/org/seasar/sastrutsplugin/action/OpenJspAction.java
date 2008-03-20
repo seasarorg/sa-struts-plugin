@@ -20,6 +20,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.compiler.InvalidInputException;
+import org.eclipse.jdt.internal.corext.refactoring.nls.NLSElement;
+import org.eclipse.jdt.internal.corext.refactoring.nls.NLSLine;
+import org.eclipse.jdt.internal.corext.refactoring.nls.NLSScanner;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,6 +47,7 @@ import org.seasar.sastrutsplugin.naming.DefaultAutoNaming;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.IDEUtil;
 import org.seasar.sastrutsplugin.util.PreferencesUtil;
+import org.seasar.sastrutsplugin.util.StringUtil;
 import org.seasar.sastrutsplugin.wizard.JspCreationWizard;
 
 public class OpenJspAction implements IEditorActionDelegate,
@@ -63,13 +69,23 @@ public class OpenJspAction implements IEditorActionDelegate,
 		IEditorPart editor = WorkbenchUtil.getActiveEditor();
 		ITextSelection textSelection = (ITextSelection) ((ITextEditor) editor)
 				.getSelectionProvider().getSelection();
-		String selectedElementText = textSelection.getText();
 		IJavaElement javaElement = JavaUI.getEditorInputJavaElement(editor
 				.getEditorInput());
 		if (javaElement instanceof ICompilationUnit) {
 			ICompilationUnit cunit = (ICompilationUnit) javaElement;
+			NLSLine[] lines = createRawLines(cunit);
+			String selectedElementText = null;
+			for (int i = 0; i < lines.length; i++) {
+				if (lines[i].getLineNumber() == textSelection.getStartLine()) {
+					selectedElementText = StringUtil
+							.decodeString(((NLSElement) lines[i].getElements()[0])
+									.getValue());
+					break;
+				}
+			}
 			String className = cunit.findPrimaryType().getFullyQualifiedName();
 			if (className.endsWith(SAStrutsConstans.ACTION)
+					&& !StringUtil.isEmpty(selectedElementText)
 					&& selectedElementText
 							.endsWith(SAStrutsConstans.JSP_SUFFIX)) {
 				String componentName = getComponentName(className);
@@ -152,5 +168,15 @@ public class OpenJspAction implements IEditorActionDelegate,
 	private Shell getShell() {
 		return shell != null ? shell : WorkbenchUtil.getWorkbenchWindow()
 				.getShell();
+	}
+
+	private static NLSLine[] createRawLines(ICompilationUnit cu) {
+		try {
+			return NLSScanner.scan(cu);
+		} catch (JavaModelException x) {
+			return new NLSLine[0];
+		} catch (InvalidInputException x) {
+			return new NLSLine[0];
+		}
 	}
 }
