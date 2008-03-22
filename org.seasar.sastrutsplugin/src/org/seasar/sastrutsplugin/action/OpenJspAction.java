@@ -53,16 +53,7 @@ import org.seasar.sastrutsplugin.wizard.JspCreationWizard;
 public class OpenJspAction implements IEditorActionDelegate,
 		IObjectActionDelegate {
 
-	private Shell shell;
-
-	private ITextEditor editor;
-
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		if (targetPart == null) {
-			shell = null;
-			return;
-		}
-		shell = targetPart.getSite().getShell();
 	}
 
 	public void run(IAction action) {
@@ -104,7 +95,8 @@ public class OpenJspAction implements IEditorActionDelegate,
 						wizard.setFileName(selectedElementText);
 						wizard.init(PlatformUI.getWorkbench(),
 								new StructuredSelection(jspFile));
-						WizardDialog dialog = new WizardDialog(shell, wizard);
+						WizardDialog dialog = new WizardDialog(getShell(),
+								wizard);
 						dialog.open();
 					}
 				} else {
@@ -126,18 +118,6 @@ public class OpenJspAction implements IEditorActionDelegate,
 	}
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-
-		if (targetEditor == null) {
-			shell = null;
-			return;
-		}
-		shell = targetEditor.getSite().getShell();
-		if (!(targetEditor instanceof ITextEditor)) {
-			editor = null;
-			return;
-		}
-		editor = (ITextEditor) targetEditor;
-
 	}
 
 	/**
@@ -160,14 +140,13 @@ public class OpenJspAction implements IEditorActionDelegate,
 	}
 
 	private boolean confirmCreation() {
-		String title = Messages.JPS_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
-		String msg = Messages.JPS_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
+		String title = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
+		String msg = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
 		return MessageDialog.openConfirm(getShell(), title, msg);
 	}
 
 	private Shell getShell() {
-		return shell != null ? shell : WorkbenchUtil.getWorkbenchWindow()
-				.getShell();
+		return WorkbenchUtil.getWorkbenchWindow().getShell();
 	}
 
 	private static NLSLine[] createRawLines(ICompilationUnit cu) {

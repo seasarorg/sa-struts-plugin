@@ -30,6 +30,10 @@ public class SAStrutsPreferenceInitializer extends
 				.getPreferenceStoreOfWorkspace();
 		store.setDefault(SAStrutsConstans.PREF_WEBCONTENTS_ROOT,
 				SAStrutsConstans.PREF_DEFAULT_WEBCONTENTS_ROOT);
+		store.setDefault(SAStrutsConstans.PREF_MAIN_JAVA_PATH,
+				SAStrutsConstans.PREF_DEFAULT_MAIN_JAVA_PATH);
+		store.setDefault(SAStrutsConstans.PREF_CONVENTION_DICON_PATH,
+				SAStrutsConstans.PREF_DEFAULT_CONVENTION_DICON_PATH);
 	}
 
 }

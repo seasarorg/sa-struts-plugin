@@ -22,10 +22,26 @@ public final class SAStrutsConstans {
 
 	public static final String PREF_DEFAULT_WEBCONTENTS_ROOT = "/webapp";
 
+	public static final String PREF_MAIN_JAVA_PATH = "MainJavaPath";
+
+	public static final String PREF_DEFAULT_MAIN_JAVA_PATH = "/src/main/java";
+
+	public static final String PREF_CONVENTION_DICON_PATH = "ConventionDiconPath";
+
+	public static final String PREF_DEFAULT_CONVENTION_DICON_PATH = "/src/main/resources/convention.dicon";
+
 	public static final String ACTION = "Action";
+
+	public static final String LOWER_CASE_ACTION = "action";
 
 	public static final String INDEX_ACTION = "IndexAction";
 
 	public static final String JSP_SUFFIX = ".jsp";
+
+	public static final String JAVA_SUFFIX = ".java";
+
+	public static final String FORM_TAG = "s:form";
+
+	public static final String ROOTPACKAGE_XPATH = "/components/component/initMethod/arg/text()";
 
 }

@@ -25,9 +25,13 @@ public class Messages extends NLS {
 		NLS.initializeMessages(clazz.getName(), clazz);
 	}
 
-	public static String JPS_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
+	public static String JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
 
-	public static String JPS_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
+	public static String JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
+
+	public static String JAVA_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
+
+	public static String JAVA_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
 
 	public static String WIZARD_JSP_CREATION_TITLE;
 
@@ -35,8 +39,18 @@ public class Messages extends NLS {
 
 	public static String WIZARD_JSP_CREATION_PAGE_NEW_FILE_LABEL;
 
+	public static String WIZARD_JAVA_CREATION_TITLE;
+
+	public static String WIZARD_JAVA_CREATION_PAGE_TITLE;
+
+	public static String WIZARD_JAVA_CREATION_PAGE_NEW_FILE_LABEL;
+
 	public static String PROPERTY_PAGE_WEBAPP_ROOT;
 
 	public static String PROPERTY_PAGE_BROWSE;
+
+	public static String PROPERTY_PAGE_MAIN_JAVA_PATH;
+
+	public static String PROPERTY_PAGE_CONVENTION_DICON_PATH;
 
 }
