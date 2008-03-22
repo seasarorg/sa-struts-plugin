@@ -1,7 +1,7 @@
 SAStrutsPlugin 変更履歴
 
 * 0.0.2 [2008/3/22]
-[Improvement] JavaソースにあるJSPファイル名の文字列を選択しなくても、カーソル行からJSPに飛べるようにする [SAStruts-27]
+[Improvement] JavaソースにあるJSPファイル名の文字列を選択しなくても、カーソル行からJSPに飛べるようにする [SAStruts-27] [Seasar-user:13282]
 [New Feature] JSPファイルからJavaファイルに飛べるようにする。 [SAStruts-28]
 
 * 0.0.1 [2008/3/14]
