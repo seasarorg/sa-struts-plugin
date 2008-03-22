@@ -174,9 +174,9 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 				String subAppName = actionAttribute.substring(1,
 						actionAttribute.lastIndexOf('/'));
 				return subAppName
-						+ StringUtil.capitalize(actionAttribute
-								.substring(actionAttribute
-										.lastIndexOf('/')))
+						+ "/"
+						+ StringUtil.capitalize(actionAttribute.substring(1,
+								actionAttribute.lastIndexOf('/')))
 						+ SAStrutsConstans.ACTION
 						+ SAStrutsConstans.JAVA_SUFFIX;
 			}
