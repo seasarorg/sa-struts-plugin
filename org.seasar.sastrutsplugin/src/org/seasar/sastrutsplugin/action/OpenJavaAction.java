@@ -57,6 +57,7 @@ import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
 import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.bean.FormInfomation;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.IDEUtil;
 import org.seasar.sastrutsplugin.util.PreferencesUtil;
@@ -76,8 +77,8 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 	}
 
 	public void run(IAction action) {
-		String actionAttribute = getActionAttribute();
-		if (StringUtil.isEmpty(actionAttribute)) {
+		FormInfomation formInfomation = getFormInfomation();
+		if (formInfomation == null) {
 			return;
 		}
 		IFile jspFile = ((FileEditorInput) WorkbenchUtil.getActiveEditor()
@@ -87,7 +88,8 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 		if (StringUtil.isEmpty(rootPackageName)) {
 			return;
 		}
-		String javaFileName = getJavaFileName(jspFile, actionAttribute);
+		String javaFileName = getJavaFileName(jspFile,
+				formInfomation.actionAttribute);
 		if (StringUtil.isEmpty(javaFileName)) {
 			return;
 		}
@@ -107,7 +109,7 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 				dialog.open();
 			}
 		} else {
-			IDEUtil.openEditor(javaFile);
+			IDEUtil.openEditor(javaFile, formInfomation.nameAttribute);
 		}
 	}
 
@@ -127,41 +129,65 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 		return WorkbenchUtil.getWorkbenchWindow().getShell();
 	}
 
-	private String getActionAttribute() {
+	private FormInfomation getFormInfomation() {
 		IEditorPart editor = WorkbenchUtil.getActiveEditor();
 		IStructuredModel model = (IStructuredModel) editor
 				.getAdapter(IStructuredModel.class);
 		IDOMDocument doc = ((IDOMModel) model).getDocument();
 		Element element = doc.getDocumentElement();
-		NodeList nodeList = element
+		NodeList formNodeList = element
 				.getElementsByTagName(SAStrutsConstans.FORM_TAG);
-		String actionAttribute = null;
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node node = nodeList.item(i);
-			String tempActionAttribute = ((Element) node)
+		for (int i = 0; i < formNodeList.getLength(); i++) {
+			Node formNode = formNodeList.item(i);
+			String actionAttribute = ((Element) formNode)
 					.getAttribute(SAStrutsConstans.LOWER_CASE_ACTION);
-			if (!StringUtil.isEmpty(tempActionAttribute)) {
-				IDOMNode domNode = (IDOMNode) node;
-				int lineNumber = -1;
-				try {
-					IDocument document = ((ITextEditor) editor)
-							.getDocumentProvider().getDocument(
-									editor.getEditorInput());
-					lineNumber = document.getLineOfOffset(domNode
-							.getStartOffset());
-				} catch (BadLocationException e) {
-					LogUtil.log(Activator.getDefault(), e);
+			if (!StringUtil.isEmpty(actionAttribute)) {
+				IDOMNode formDomNode = (IDOMNode) formNode;
+				if (isMatchLineNumber(editor, formDomNode)) {
+					return new FormInfomation(actionAttribute,
+							SAStrutsConstans.INDEX);
 				}
-				ITextSelection textSelection = (ITextSelection) ((ITextEditor) editor)
-						.getSelectionProvider().getSelection();
-				if (lineNumber != -1
-						&& lineNumber == textSelection.getStartLine()) {
-					actionAttribute = tempActionAttribute;
-					break;
+				NodeList inputNodeList = ((Element) formNode)
+						.getElementsByTagName(SAStrutsConstans.INPUT);
+				for (int j = 0; j < inputNodeList.getLength(); j++) {
+					Node inputNode = inputNodeList.item(j);
+					String typeAttribute = ((Element) inputNode)
+							.getAttribute(SAStrutsConstans.TYPE);
+					if (!StringUtil.isEmpty(typeAttribute)
+							&& typeAttribute.equals(SAStrutsConstans.SUBMIT)) {
+						String nameAttribute = ((Element) inputNode)
+								.getAttribute(SAStrutsConstans.NAME);
+						IDOMNode inputDomNode = (IDOMNode) inputNode;
+						if (isMatchLineNumber(editor, inputDomNode)) {
+							if (StringUtil.isEmpty(nameAttribute)) {
+								nameAttribute = SAStrutsConstans.SUBMIT;
+							}
+							return new FormInfomation(actionAttribute,
+									nameAttribute);
+						}
+					}
 				}
 			}
 		}
-		return actionAttribute;
+		return null;
+	}
+
+	private boolean isMatchLineNumber(IEditorPart editor, IDOMNode domNode) {
+		int lineNumber = -1;
+		try {
+			IDocument document = ((ITextEditor) editor).getDocumentProvider()
+					.getDocument(editor.getEditorInput());
+			lineNumber = document.getLineOfOffset(domNode.getStartOffset());
+		} catch (BadLocationException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		}
+		ITextSelection textSelection = (ITextSelection) ((ITextEditor) editor)
+				.getSelectionProvider().getSelection();
+		if (lineNumber != -1 && lineNumber == textSelection.getStartLine()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private String getJavaFileName(IFile jspFile, String actionAttribute) {

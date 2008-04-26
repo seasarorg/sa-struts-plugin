@@ -16,6 +16,13 @@
 package org.seasar.sastrutsplugin.util;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -26,6 +33,7 @@ import org.eclipse.ui.ide.IDE;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
+import org.seasar.sastrutsplugin.SAStrutsConstans;
 
 public class IDEUtil {
 
@@ -42,6 +50,42 @@ public class IDEUtil {
 		if (page != null) {
 			try {
 				return IDE.openEditor(page, file);
+			} catch (PartInitException e) {
+				LogUtil.log(Activator.getDefault(), e);
+			}
+		}
+		return null;
+	}
+
+	public static IEditorPart openEditor(IFile file, String methodName) {
+		return openEditor(PlatformUI.getWorkbench(), file, methodName);
+	}
+
+	public static IEditorPart openEditor(IWorkbench workbench, IFile file,
+			String methodName) {
+		if (workbench == null || file == null || !file.exists()) {
+			return null;
+		}
+		IWorkbenchWindow window = WorkbenchUtil.getWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		if (page != null) {
+			try {
+				if (StringUtil.isEmpty(methodName)) {
+					return IDE.openEditor(page, file);
+				}
+				ICompilationUnit compilationUnit = JavaCore
+						.createCompilationUnitFrom(file);
+				String className = compilationUnit.findPrimaryType()
+						.getFullyQualifiedName();
+				IJavaProject javaProject = JavaCore.create(file.getProject());
+				IType type = javaProject.findType(className);
+				IMethod method = type.getMethod(methodName, null);
+				if(!method.exists()) {
+					method = type.getMethod(SAStrutsConstans.INDEX, null);
+				}
+				return JavaUI.openInEditor(method);
+			} catch (JavaModelException e) {
+				LogUtil.log(Activator.getDefault(), e);
 			} catch (PartInitException e) {
 				LogUtil.log(Activator.getDefault(), e);
 			}

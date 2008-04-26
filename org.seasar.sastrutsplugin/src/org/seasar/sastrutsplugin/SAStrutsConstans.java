@@ -43,5 +43,15 @@ public final class SAStrutsConstans {
 	public static final String FORM_TAG = "s:form";
 
 	public static final String ROOTPACKAGE_XPATH = "/components/component/initMethod/arg/text()";
+	
+	public static final String INDEX = "index";
+	
+	public static final String INPUT = "input";
+	
+	public static final String SUBMIT = "submit";
+	
+	public static final String NAME = "name";
+	
+	public static final String TYPE = "type";
 
 }
