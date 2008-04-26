@@ -31,6 +31,11 @@ import javax.xml.xpath.XPathFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -227,7 +232,6 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 						SAStrutsConstans.PREF_CONVENTION_DICON_PATH);
 		File conventionDicon = ((Path) project.getFile(conventionDiconPath)
 				.getLocation()).toFile();
-		String rootPackageName = null;
 		try {
 			DocumentBuilderFactory dbfactory = DocumentBuilderFactory
 					.newInstance();
@@ -240,9 +244,28 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 					.compile(SAStrutsConstans.ROOTPACKAGE_XPATH);
 			Object result = expr.evaluate(doc, XPathConstants.NODESET);
 			NodeList nodes = (NodeList) result;
-			if (nodes.getLength() == 1) {
-				rootPackageName = StringUtil.decodeString(nodes.item(0)
+			if (nodes.getLength() == 0) {
+				String title = Messages.ERROR_DIALOG_ROOT_PACKAGE_NAME_TITLE;
+				String msg = Messages.ERROR_DIALOG_ROOT_PACKAGE_NAME_NOT_FOUND_MESSAGE;
+				MessageDialog.openError(getShell(), title, msg);
+			} else if (nodes.getLength() == 1) {
+				return StringUtil.decodeString(nodes.item(0)
 						.getNodeValue());
+			} else {
+				for(int i=0; i<nodes.getLength(); i++) {
+					String rootPackageName = StringUtil.decodeString(nodes.item(i)
+							.getNodeValue());
+					IJavaProject javaProject = JavaCore.create(project);
+					IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
+					for (int j = 0; j < roots.length; j++) {
+						if (roots[j].getKind() == IPackageFragmentRoot.K_SOURCE) {
+							IPackageFragment packageFragment = roots[j].getPackageFragment(rootPackageName + "." + SAStrutsConstans.LOWER_CASE_ACTION);
+							if(packageFragment.exists()) {
+								return rootPackageName;
+							}
+						}
+					}
+				}
 			}
 		} catch (XPathExpressionException e) {
 			LogUtil.log(Activator.getDefault(), e);
@@ -254,8 +277,10 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 			LogUtil.log(Activator.getDefault(), e);
 		} catch (IOException e) {
 			LogUtil.log(Activator.getDefault(), e);
+		} catch (JavaModelException e) {
+			LogUtil.log(Activator.getDefault(), e);
 		}
-		return rootPackageName;
+		return null;
 	}
 
 	public void dispose() {

@@ -52,5 +52,9 @@ public class Messages extends NLS {
 	public static String PROPERTY_PAGE_MAIN_JAVA_PATH;
 
 	public static String PROPERTY_PAGE_CONVENTION_DICON_PATH;
+	
+	public static String ERROR_DIALOG_ROOT_PACKAGE_NAME_TITLE;
+	
+	public static String ERROR_DIALOG_ROOT_PACKAGE_NAME_NOT_FOUND_MESSAGE;
 
 }

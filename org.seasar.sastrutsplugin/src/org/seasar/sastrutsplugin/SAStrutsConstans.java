@@ -42,7 +42,7 @@ public final class SAStrutsConstans {
 
 	public static final String FORM_TAG = "s:form";
 
-	public static final String ROOTPACKAGE_XPATH = "/components/component/initMethod/arg/text()";
+	public static final String ROOTPACKAGE_XPATH = "/components/component[@class='org.seasar.framework.convention.impl.NamingConventionImpl']/initMethod[@name='addRootPackageName']/arg/text()";
 	
 	public static final String INDEX = "index";
 	
