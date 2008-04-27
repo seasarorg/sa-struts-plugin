@@ -1,0 +1,13 @@
+SAStrutsPlugin 変更履歴
+
+* 0.0.3 [2008/04/27]
+[Improvement] ネット接続していない環境でも使用できるようにする（EntityResolverを使う）。　[SASTRUTS-39]
+[Improvement] convention.diconからルートパッケージを取得する処理の改良 [SASTRUTS-38] [Seasar-user:13821]
+[New Feature] JSPのinputタグからJavaのメソッドに飛べるようにする。 [SASTRUTS-37]
+
+* 0.0.2 [2008/3/22]
+[Improvement] JavaソースにあるJSPファイル名の文字列を選択しなくても、カーソル行からJSPに飛べるようにする [SAStruts-27] [Seasar-user:13282]
+[New Feature] JSPファイルからJavaファイルに飛べるようにする。 [SAStruts-28]
+
+* 0.0.1 [2008/3/14]
+- 最初のリリース
