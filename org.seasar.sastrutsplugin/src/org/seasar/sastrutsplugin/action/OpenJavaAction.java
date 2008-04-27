@@ -73,6 +73,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
@@ -237,6 +239,25 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 					.newInstance();
 			dbfactory.setNamespaceAware(true);
 			DocumentBuilder builder = dbfactory.newDocumentBuilder();
+			builder.setEntityResolver(new EntityResolver() {
+				public InputSource resolveEntity(String publicId,
+						String systemId) throws SAXException, IOException {
+					if (publicId.equals(SAStrutsConstans.PUBLIC_ID_DICON_24)
+							&& systemId
+									.equals(SAStrutsConstans.SYSTEM_ID_DICON_24)) {
+						try {
+							InputSource source = new InputSource(Activator
+									.getDefault().getBundle().getEntry(
+											SAStrutsConstans.DTD_DICON_24)
+									.openStream());
+							return source;
+						} catch (IOException e) {
+							LogUtil.log(Activator.getDefault(), e);
+						}
+					}
+					return null;
+				}
+			});
 			Document doc = builder.parse(conventionDicon);
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath xpath = factory.newXPath();
