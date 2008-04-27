@@ -185,7 +185,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 				webRoot.getText());
 		getPreferenceStore().setValue(SAStrutsConstans.PREF_MAIN_JAVA_PATH,
 				mainJavaPath.getText());
-		getPreferenceStore().setValue(SAStrutsConstans.PREF_CONVENTION_DICON_PATH,
+		getPreferenceStore().setValue(
+				SAStrutsConstans.PREF_CONVENTION_DICON_PATH,
 				conventionDiconPath.getText());
 		return true;
 	}
@@ -193,7 +194,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 	public void performDefaults() {
 		webRoot.setText(SAStrutsConstans.PREF_DEFAULT_WEBCONTENTS_ROOT);
 		mainJavaPath.setText(SAStrutsConstans.PREF_DEFAULT_MAIN_JAVA_PATH);
-		conventionDiconPath.setText(SAStrutsConstans.PREF_DEFAULT_CONVENTION_DICON_PATH);
+		conventionDiconPath
+				.setText(SAStrutsConstans.PREF_DEFAULT_CONVENTION_DICON_PATH);
 	}
 
 }

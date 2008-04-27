@@ -43,21 +43,21 @@ public final class SAStrutsConstans {
 	public static final String FORM_TAG = "s:form";
 
 	public static final String ROOTPACKAGE_XPATH = "/components/component[@class='org.seasar.framework.convention.impl.NamingConventionImpl']/initMethod[@name='addRootPackageName']/arg/text()";
-	
+
 	public static final String INDEX = "index";
-	
+
 	public static final String INPUT = "input";
-	
+
 	public static final String SUBMIT = "submit";
-	
+
 	public static final String NAME = "name";
-	
+
 	public static final String TYPE = "type";
-	
+
 	public static final String SYSTEM_ID_DICON_24 = "http://www.seasar.org/dtd/components24.dtd";
-	
+
 	public static final String PUBLIC_ID_DICON_24 = "-//SEASAR//DTD S2Container 2.4//EN";
-	
+
 	public static final String DTD_DICON_24 = "/components24.dtd";
 
 }

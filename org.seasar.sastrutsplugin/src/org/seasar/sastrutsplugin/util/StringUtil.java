@@ -73,7 +73,7 @@ public final class StringUtil {
 		chars[0] = Character.toUpperCase(chars[0]);
 		return new String(chars);
 	}
-	
+
 	/**
 	 * 文字列リテラルをデコードします。
 	 * 

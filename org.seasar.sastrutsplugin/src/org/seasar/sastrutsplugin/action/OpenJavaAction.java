@@ -270,18 +270,21 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 				String msg = Messages.ERROR_DIALOG_ROOT_PACKAGE_NAME_NOT_FOUND_MESSAGE;
 				MessageDialog.openError(getShell(), title, msg);
 			} else if (nodes.getLength() == 1) {
-				return StringUtil.decodeString(nodes.item(0)
-						.getNodeValue());
+				return StringUtil.decodeString(nodes.item(0).getNodeValue());
 			} else {
-				for(int i=0; i<nodes.getLength(); i++) {
-					String rootPackageName = StringUtil.decodeString(nodes.item(i)
-							.getNodeValue());
+				for (int i = 0; i < nodes.getLength(); i++) {
+					String rootPackageName = StringUtil.decodeString(nodes
+							.item(i).getNodeValue());
 					IJavaProject javaProject = JavaCore.create(project);
-					IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
+					IPackageFragmentRoot[] roots = javaProject
+							.getPackageFragmentRoots();
 					for (int j = 0; j < roots.length; j++) {
 						if (roots[j].getKind() == IPackageFragmentRoot.K_SOURCE) {
-							IPackageFragment packageFragment = roots[j].getPackageFragment(rootPackageName + "." + SAStrutsConstans.LOWER_CASE_ACTION);
-							if(packageFragment.exists()) {
+							IPackageFragment packageFragment = roots[j]
+									.getPackageFragment(rootPackageName
+											+ "."
+											+ SAStrutsConstans.LOWER_CASE_ACTION);
+							if (packageFragment.exists()) {
 								return rootPackageName;
 							}
 						}

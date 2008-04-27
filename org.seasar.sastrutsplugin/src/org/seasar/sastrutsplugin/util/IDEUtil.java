@@ -80,7 +80,7 @@ public class IDEUtil {
 				IJavaProject javaProject = JavaCore.create(file.getProject());
 				IType type = javaProject.findType(className);
 				IMethod method = type.getMethod(methodName, null);
-				if(!method.exists()) {
+				if (!method.exists()) {
 					method = type.getMethod(SAStrutsConstans.INDEX, null);
 				}
 				return JavaUI.openInEditor(method);
