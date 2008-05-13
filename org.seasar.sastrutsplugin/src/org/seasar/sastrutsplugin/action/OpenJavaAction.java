@@ -103,7 +103,7 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
 				project).getString(SAStrutsConstans.PREF_MAIN_JAVA_PATH);
 		IFile javaFile = project.getFile(mainJavaPath + File.separator
-				+ rootPackageName + File.separator
+				+ rootPackageName.replace('.', '/') + File.separator
 				+ SAStrutsConstans.LOWER_CASE_ACTION + File.separator
 				+ javaFileName);
 		if (!javaFile.exists()) {
