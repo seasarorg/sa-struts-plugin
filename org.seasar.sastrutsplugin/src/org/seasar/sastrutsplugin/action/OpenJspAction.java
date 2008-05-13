@@ -80,8 +80,13 @@ public class OpenJspAction implements IEditorActionDelegate,
 					&& selectedElementText
 							.endsWith(SAStrutsConstans.JSP_SUFFIX)) {
 				String componentName = getComponentName(className);
-				String jspPath = getActionPath(componentName)
-						+ selectedElementText;
+				String jspPath = null;
+				if (selectedElementText.startsWith("/")) {
+					jspPath = selectedElementText;
+				} else {
+					jspPath = getActionPath(componentName)
+							+ selectedElementText;
+				}
 				IFile file = ((FileEditorInput) editor.getEditorInput())
 						.getFile();
 				IProject project = file.getProject();
