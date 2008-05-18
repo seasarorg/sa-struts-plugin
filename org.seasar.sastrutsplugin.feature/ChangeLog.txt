@@ -1,5 +1,11 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.4 [2008/05/18]
+[Bug] IndexActionから存在しているJSPファイルに飛べない問題を修正しました。 [SASTRUTS-42]
+[Bug] JavaからJSPに遷移する際、文字列リテラルの先頭が/の場合でもWebアプリケーションのルートからの相対パスでなくアクションからの相対パスになってしまう問題を修正しました。 [SASTRUTS-43]
+[Bug] 二段階以上ネストしたルートパッケージを考慮していない問題を修正しました。 [SASTRUTS-44]
+[Improvement] Viewのプレフィックス対応 [SASTRUTS-48]
+
 * 0.0.3 [2008/04/27]
 [Improvement] ネット接続していない環境でも使用できるようにする（EntityResolverを使う）。　[SASTRUTS-39]
 [Improvement] convention.diconからルートパッケージを取得する処理の改良 [SASTRUTS-38] [Seasar-user:13821]
