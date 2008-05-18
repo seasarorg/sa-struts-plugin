@@ -33,7 +33,7 @@ import org.eclipse.ui.ide.IDE;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
-import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 
 public class IDEUtil {
 
@@ -81,7 +81,7 @@ public class IDEUtil {
 				IType type = javaProject.findType(className);
 				IMethod method = type.getMethod(methodName, null);
 				if (!method.exists()) {
-					method = type.getMethod(SAStrutsConstans.INDEX, null);
+					method = type.getMethod(SAStrutsConstants.INDEX, null);
 				}
 				return JavaUI.openInEditor(method);
 			} catch (JavaModelException e) {

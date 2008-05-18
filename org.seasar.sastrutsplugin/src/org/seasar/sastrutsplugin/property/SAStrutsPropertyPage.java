@@ -38,7 +38,7 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.seasar.eclipse.common.wiget.ResourceTreeSelectionDialog;
-import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.PreferencesUtil;
 
@@ -74,7 +74,7 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		webRoot.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		webRoot
 				.setText(store
-						.getString(SAStrutsConstans.PREF_WEBCONTENTS_ROOT));
+						.getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT));
 
 		Button webRootBotton = new Button(composite, SWT.BUTTON1);
 		webRootBotton.setText(Messages.PROPERTY_PAGE_BROWSE);
@@ -89,7 +89,7 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		mainJavaPath = new Text(composite, SWT.BORDER);
 		mainJavaPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		mainJavaPath.setText(store
-				.getString(SAStrutsConstans.PREF_MAIN_JAVA_PATH));
+				.getString(SAStrutsConstants.PREF_MAIN_JAVA_PATH));
 
 		Button mainJavaPathbutton = new Button(composite, SWT.BUTTON1);
 		mainJavaPathbutton.setText(Messages.PROPERTY_PAGE_BROWSE);
@@ -106,7 +106,7 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		conventionDiconPath
 				.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		conventionDiconPath.setText(store
-				.getString(SAStrutsConstans.PREF_CONVENTION_DICON_PATH));
+				.getString(SAStrutsConstants.PREF_CONVENTION_DICON_PATH));
 
 		Button conventionDiconPathButton = new Button(composite, SWT.BUTTON1);
 		conventionDiconPathButton.setText(Messages.PROPERTY_PAGE_BROWSE);
@@ -181,21 +181,21 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 	}
 
 	public boolean performOk() {
-		getPreferenceStore().setValue(SAStrutsConstans.PREF_WEBCONTENTS_ROOT,
+		getPreferenceStore().setValue(SAStrutsConstants.PREF_WEBCONTENTS_ROOT,
 				webRoot.getText());
-		getPreferenceStore().setValue(SAStrutsConstans.PREF_MAIN_JAVA_PATH,
+		getPreferenceStore().setValue(SAStrutsConstants.PREF_MAIN_JAVA_PATH,
 				mainJavaPath.getText());
 		getPreferenceStore().setValue(
-				SAStrutsConstans.PREF_CONVENTION_DICON_PATH,
+				SAStrutsConstants.PREF_CONVENTION_DICON_PATH,
 				conventionDiconPath.getText());
 		return true;
 	}
 
 	public void performDefaults() {
-		webRoot.setText(SAStrutsConstans.PREF_DEFAULT_WEBCONTENTS_ROOT);
-		mainJavaPath.setText(SAStrutsConstans.PREF_DEFAULT_MAIN_JAVA_PATH);
+		webRoot.setText(SAStrutsConstants.PREF_DEFAULT_WEBCONTENTS_ROOT);
+		mainJavaPath.setText(SAStrutsConstants.PREF_DEFAULT_MAIN_JAVA_PATH);
 		conventionDiconPath
-				.setText(SAStrutsConstans.PREF_DEFAULT_CONVENTION_DICON_PATH);
+				.setText(SAStrutsConstants.PREF_DEFAULT_CONVENTION_DICON_PATH);
 	}
 
 }

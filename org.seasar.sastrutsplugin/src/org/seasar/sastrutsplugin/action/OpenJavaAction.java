@@ -61,7 +61,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
-import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.bean.FormInfomation;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.IDEUtil;
@@ -101,10 +101,10 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 			return;
 		}
 		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
-				project).getString(SAStrutsConstans.PREF_MAIN_JAVA_PATH);
+				project).getString(SAStrutsConstants.PREF_MAIN_JAVA_PATH);
 		IFile javaFile = project.getFile(mainJavaPath + File.separator
 				+ rootPackageName.replace('.', '/') + File.separator
-				+ SAStrutsConstans.LOWER_CASE_ACTION + File.separator
+				+ SAStrutsConstants.LOWER_CASE_ACTION + File.separator
 				+ javaFileName);
 		if (!javaFile.exists()) {
 			if (confirmCreation()) {
@@ -143,31 +143,31 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 		IDOMDocument doc = ((IDOMModel) model).getDocument();
 		Element element = doc.getDocumentElement();
 		NodeList formNodeList = element
-				.getElementsByTagName(SAStrutsConstans.FORM_TAG);
+				.getElementsByTagName(SAStrutsConstants.FORM_TAG);
 		for (int i = 0; i < formNodeList.getLength(); i++) {
 			Node formNode = formNodeList.item(i);
 			String actionAttribute = ((Element) formNode)
-					.getAttribute(SAStrutsConstans.LOWER_CASE_ACTION);
+					.getAttribute(SAStrutsConstants.LOWER_CASE_ACTION);
 			if (!StringUtil.isEmpty(actionAttribute)) {
 				IDOMNode formDomNode = (IDOMNode) formNode;
 				if (isMatchLineNumber(editor, formDomNode)) {
 					return new FormInfomation(actionAttribute,
-							SAStrutsConstans.INDEX);
+							SAStrutsConstants.INDEX);
 				}
 				NodeList inputNodeList = ((Element) formNode)
-						.getElementsByTagName(SAStrutsConstans.INPUT);
+						.getElementsByTagName(SAStrutsConstants.INPUT);
 				for (int j = 0; j < inputNodeList.getLength(); j++) {
 					Node inputNode = inputNodeList.item(j);
 					String typeAttribute = ((Element) inputNode)
-							.getAttribute(SAStrutsConstans.TYPE);
+							.getAttribute(SAStrutsConstants.TYPE);
 					if (!StringUtil.isEmpty(typeAttribute)
-							&& typeAttribute.equals(SAStrutsConstans.SUBMIT)) {
+							&& typeAttribute.equals(SAStrutsConstants.SUBMIT)) {
 						String nameAttribute = ((Element) inputNode)
-								.getAttribute(SAStrutsConstans.NAME);
+								.getAttribute(SAStrutsConstants.NAME);
 						IDOMNode inputDomNode = (IDOMNode) inputNode;
 						if (isMatchLineNumber(editor, inputDomNode)) {
 							if (StringUtil.isEmpty(nameAttribute)) {
-								nameAttribute = SAStrutsConstans.SUBMIT;
+								nameAttribute = SAStrutsConstants.SUBMIT;
 							}
 							return new FormInfomation(actionAttribute,
 									nameAttribute);
@@ -201,8 +201,8 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 		if (actionAttribute.startsWith("/")) {
 			if (actionAttribute.lastIndexOf('/') == 0) {
 				return StringUtil.capitalize(actionAttribute.substring(1))
-						+ SAStrutsConstans.ACTION
-						+ SAStrutsConstans.JAVA_SUFFIX;
+						+ SAStrutsConstants.ACTION
+						+ SAStrutsConstants.JAVA_SUFFIX;
 			} else {
 				String subAppName = actionAttribute.substring(1,
 						actionAttribute.lastIndexOf('/'));
@@ -210,28 +210,28 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 						+ "/"
 						+ StringUtil.capitalize(actionAttribute.substring(1,
 								actionAttribute.lastIndexOf('/')))
-						+ SAStrutsConstans.ACTION
-						+ SAStrutsConstans.JAVA_SUFFIX;
+						+ SAStrutsConstants.ACTION
+						+ SAStrutsConstants.JAVA_SUFFIX;
 			}
 		} else {
 			IProject project = jspFile.getProject();
 			String jspFilePath = jspFile.getFullPath().toOSString();
 			String projectPath = project.getFullPath().toOSString();
 			String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
-					project).getString(SAStrutsConstans.PREF_WEBCONTENTS_ROOT);
+					project).getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT);
 			jspFilePath = jspFilePath.substring(projectPath.length()
 					+ webRoot.length() + 1, jspFilePath.length());
 			String componentName = jspFilePath.substring(0, jspFilePath
 					.lastIndexOf(File.separator));
 			return StringUtil.capitalize(componentName)
-					+ SAStrutsConstans.ACTION + SAStrutsConstans.JAVA_SUFFIX;
+					+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
 		}
 	}
 
 	private String getRootPackageName(IProject project) {
 		String conventionDiconPath = PreferencesUtil
 				.getPreferenceStoreOfProject(project).getString(
-						SAStrutsConstans.PREF_CONVENTION_DICON_PATH);
+						SAStrutsConstants.PREF_CONVENTION_DICON_PATH);
 		File conventionDicon = ((Path) project.getFile(conventionDiconPath)
 				.getLocation()).toFile();
 		try {
@@ -242,13 +242,13 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 			builder.setEntityResolver(new EntityResolver() {
 				public InputSource resolveEntity(String publicId,
 						String systemId) throws SAXException, IOException {
-					if (publicId.equals(SAStrutsConstans.PUBLIC_ID_DICON_24)
+					if (publicId.equals(SAStrutsConstants.PUBLIC_ID_DICON_24)
 							&& systemId
-									.equals(SAStrutsConstans.SYSTEM_ID_DICON_24)) {
+									.equals(SAStrutsConstants.SYSTEM_ID_DICON_24)) {
 						try {
 							InputSource source = new InputSource(Activator
 									.getDefault().getBundle().getEntry(
-											SAStrutsConstans.DTD_DICON_24)
+											SAStrutsConstants.DTD_DICON_24)
 									.openStream());
 							return source;
 						} catch (IOException e) {
@@ -262,7 +262,7 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath xpath = factory.newXPath();
 			XPathExpression expr = xpath
-					.compile(SAStrutsConstans.ROOTPACKAGE_XPATH);
+					.compile(SAStrutsConstants.ROOTPACKAGE_XPATH);
 			Object result = expr.evaluate(doc, XPathConstants.NODESET);
 			NodeList nodes = (NodeList) result;
 			if (nodes.getLength() == 0) {
@@ -283,7 +283,7 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 							IPackageFragment packageFragment = roots[j]
 									.getPackageFragment(rootPackageName
 											+ "."
-											+ SAStrutsConstans.LOWER_CASE_ACTION);
+											+ SAStrutsConstants.LOWER_CASE_ACTION);
 							if (packageFragment.exists()) {
 								return rootPackageName;
 							}

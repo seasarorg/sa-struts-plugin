@@ -16,7 +16,7 @@
 
 package org.seasar.sastrutsplugin;
 
-public final class SAStrutsConstans {
+public final class SAStrutsConstants {
 
 	public static final String PREF_WEBCONTENTS_ROOT = "WebContentsRoot";
 

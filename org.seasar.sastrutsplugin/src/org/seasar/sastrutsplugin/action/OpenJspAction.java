@@ -51,7 +51,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
-import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.naming.AutoNaming;
 import org.seasar.sastrutsplugin.naming.DefaultAutoNaming;
 import org.seasar.sastrutsplugin.nls.Messages;
@@ -91,10 +91,10 @@ public class OpenJspAction implements IEditorActionDelegate,
 				}
 			}
 			String className = cunit.findPrimaryType().getFullyQualifiedName();
-			if (className.endsWith(SAStrutsConstans.ACTION)
+			if (className.endsWith(SAStrutsConstants.ACTION)
 					&& !StringUtil.isEmpty(selectedElementText)
 					&& selectedElementText
-							.endsWith(SAStrutsConstans.JSP_SUFFIX)) {
+							.endsWith(SAStrutsConstants.JSP_SUFFIX)) {
 				String componentName = getComponentName(className);
 				String jspPath = null;
 				if (selectedElementText.startsWith("/")) {
@@ -108,9 +108,9 @@ public class OpenJspAction implements IEditorActionDelegate,
 				IProject project = file.getProject();
 				String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
 						project).getString(
-						SAStrutsConstans.PREF_WEBCONTENTS_ROOT);
+						SAStrutsConstants.PREF_WEBCONTENTS_ROOT);
 				File webXmlFile = ((Path) project.getFile(
-						webRoot + SAStrutsConstans.WEB_INF_WEB_XML)
+						webRoot + SAStrutsConstants.WEB_INF_WEB_XML)
 						.getLocation()).toFile();
 				IFile jspFile = project.getFile(webRoot
 						+ getViewPrefix(webXmlFile) + jspPath);
@@ -140,18 +140,18 @@ public class OpenJspAction implements IEditorActionDelegate,
 			Document doc = builder.parse(webXmlFile);
 			Element element = doc.getDocumentElement();
 			NodeList contextParamNodeList = element
-					.getElementsByTagName(SAStrutsConstans.CONTEXT_PARAM);
+					.getElementsByTagName(SAStrutsConstants.CONTEXT_PARAM);
 			if (contextParamNodeList.getLength() == 1
 					&& contextParamNodeList.item(0) instanceof Element) {
 				Element contextParamElement = (Element) contextParamNodeList
 						.item(0);
 				NodeList paramNameNodeList = contextParamElement
-						.getElementsByTagName(SAStrutsConstans.PARAM_NAME);
+						.getElementsByTagName(SAStrutsConstants.PARAM_NAME);
 				if (paramNameNodeList.getLength() == 1) {
 					if (((Node) paramNameNodeList.item(0)).getTextContent()
-							.equals(SAStrutsConstans.SASTRUTS_VIEW_PREFIX)) {
+							.equals(SAStrutsConstants.SASTRUTS_VIEW_PREFIX)) {
 						NodeList paramValueNodeList = contextParamElement
-								.getElementsByTagName(SAStrutsConstans.PARAM_VALUE);
+								.getElementsByTagName(SAStrutsConstants.PARAM_VALUE);
 						if (paramValueNodeList.getLength() == 1) {
 							return ((Node) paramValueNodeList.item(0))
 									.getTextContent();
@@ -193,10 +193,10 @@ public class OpenJspAction implements IEditorActionDelegate,
 	 * @return Viewのディレクトリ
 	 */
 	private String getActionPath(String componentName) {
-		if (componentName.equals(SAStrutsConstans.INDEX_ACTION)) {
+		if (componentName.equals(SAStrutsConstants.INDEX_ACTION)) {
 			return "/";
 		}
-		if (componentName.endsWith(SAStrutsConstans.ACTION)) {
+		if (componentName.endsWith(SAStrutsConstants.ACTION)) {
 			return "/"
 					+ componentName.substring(0, componentName.length() - 6)
 							.replace('_', '/') + "/";

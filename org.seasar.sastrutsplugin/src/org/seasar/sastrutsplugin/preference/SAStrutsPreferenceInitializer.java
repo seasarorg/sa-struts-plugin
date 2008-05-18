@@ -18,7 +18,7 @@ package org.seasar.sastrutsplugin.preference;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.seasar.sastrutsplugin.SAStrutsConstans;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.util.PreferencesUtil;
 
 public class SAStrutsPreferenceInitializer extends
@@ -28,12 +28,12 @@ public class SAStrutsPreferenceInitializer extends
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = PreferencesUtil
 				.getPreferenceStoreOfWorkspace();
-		store.setDefault(SAStrutsConstans.PREF_WEBCONTENTS_ROOT,
-				SAStrutsConstans.PREF_DEFAULT_WEBCONTENTS_ROOT);
-		store.setDefault(SAStrutsConstans.PREF_MAIN_JAVA_PATH,
-				SAStrutsConstans.PREF_DEFAULT_MAIN_JAVA_PATH);
-		store.setDefault(SAStrutsConstans.PREF_CONVENTION_DICON_PATH,
-				SAStrutsConstans.PREF_DEFAULT_CONVENTION_DICON_PATH);
+		store.setDefault(SAStrutsConstants.PREF_WEBCONTENTS_ROOT,
+				SAStrutsConstants.PREF_DEFAULT_WEBCONTENTS_ROOT);
+		store.setDefault(SAStrutsConstants.PREF_MAIN_JAVA_PATH,
+				SAStrutsConstants.PREF_DEFAULT_MAIN_JAVA_PATH);
+		store.setDefault(SAStrutsConstants.PREF_CONVENTION_DICON_PATH,
+				SAStrutsConstants.PREF_DEFAULT_CONVENTION_DICON_PATH);
 	}
 
 }
