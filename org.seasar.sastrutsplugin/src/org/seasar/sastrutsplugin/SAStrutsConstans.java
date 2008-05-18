@@ -60,4 +60,14 @@ public final class SAStrutsConstans {
 
 	public static final String DTD_DICON_24 = "/components24.dtd";
 
+	public static final String WEB_INF_WEB_XML = "/WEB-INF/web.xml";
+
+	public static final String CONTEXT_PARAM = "context-param";
+
+	public static final String PARAM_NAME = "param-name";
+
+	public static final String SASTRUTS_VIEW_PREFIX = "sastruts.VIEW_PREFIX";
+
+	public static final String PARAM_VALUE = "param-value";
+
 }

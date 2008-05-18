@@ -16,8 +16,16 @@
 
 package org.seasar.sastrutsplugin.action;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
@@ -40,7 +48,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
+import org.seasar.sastrutsplugin.Activator;
 import org.seasar.sastrutsplugin.SAStrutsConstans;
 import org.seasar.sastrutsplugin.naming.AutoNaming;
 import org.seasar.sastrutsplugin.naming.DefaultAutoNaming;
@@ -49,6 +59,12 @@ import org.seasar.sastrutsplugin.util.IDEUtil;
 import org.seasar.sastrutsplugin.util.PreferencesUtil;
 import org.seasar.sastrutsplugin.util.StringUtil;
 import org.seasar.sastrutsplugin.wizard.JspCreationWizard;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class OpenJspAction implements IEditorActionDelegate,
 		IObjectActionDelegate {
@@ -93,7 +109,11 @@ public class OpenJspAction implements IEditorActionDelegate,
 				String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
 						project).getString(
 						SAStrutsConstans.PREF_WEBCONTENTS_ROOT);
-				IFile jspFile = project.getFile(webRoot + jspPath);
+				File webXmlFile = ((Path) project.getFile(
+						webRoot + SAStrutsConstans.WEB_INF_WEB_XML)
+						.getLocation()).toFile();
+				IFile jspFile = project.getFile(webRoot
+						+ getViewPrefix(webXmlFile) + jspPath);
 				if (!jspFile.exists()) {
 					if (confirmCreation()) {
 						JspCreationWizard wizard = new JspCreationWizard();
@@ -109,6 +129,46 @@ public class OpenJspAction implements IEditorActionDelegate,
 				}
 			}
 		}
+	}
+
+	private String getViewPrefix(File webXmlFile) {
+		try {
+			DocumentBuilderFactory dbfactory = DocumentBuilderFactory
+					.newInstance();
+			dbfactory.setNamespaceAware(true);
+			DocumentBuilder builder = dbfactory.newDocumentBuilder();
+			Document doc = builder.parse(webXmlFile);
+			Element element = doc.getDocumentElement();
+			NodeList contextParamNodeList = element
+					.getElementsByTagName(SAStrutsConstans.CONTEXT_PARAM);
+			if (contextParamNodeList.getLength() == 1
+					&& contextParamNodeList.item(0) instanceof Element) {
+				Element contextParamElement = (Element) contextParamNodeList
+						.item(0);
+				NodeList paramNameNodeList = contextParamElement
+						.getElementsByTagName(SAStrutsConstans.PARAM_NAME);
+				if (paramNameNodeList.getLength() == 1) {
+					if (((Node) paramNameNodeList.item(0)).getTextContent()
+							.equals(SAStrutsConstans.SASTRUTS_VIEW_PREFIX)) {
+						NodeList paramValueNodeList = contextParamElement
+								.getElementsByTagName(SAStrutsConstans.PARAM_VALUE);
+						if (paramValueNodeList.getLength() == 1) {
+							return ((Node) paramValueNodeList.item(0))
+									.getTextContent();
+						}
+					}
+				}
+			}
+		} catch (DOMException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		} catch (ParserConfigurationException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		} catch (SAXException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		} catch (IOException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		}
+		return "/";
 	}
 
 	private String getComponentName(String className) {
