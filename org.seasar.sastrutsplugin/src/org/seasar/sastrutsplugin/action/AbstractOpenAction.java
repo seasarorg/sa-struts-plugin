@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.sastrutsplugin.Activator;
 import org.seasar.sastrutsplugin.SAStrutsConstants;
@@ -18,6 +20,17 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public abstract class AbstractOpenAction {
+
+	protected void createFolderRecursively(IFolder folder) {
+		if (!folder.getParent().exists()) {
+			createFolderRecursively((IFolder) folder.getParent());
+		}
+		try {
+			folder.create(false, true, null);
+		} catch (CoreException e) {
+			LogUtil.log(Activator.getDefault(), e);
+		}
+	}
 
 	protected String getViewPrefix(File webXmlFile) {
 		try {

@@ -29,7 +29,9 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -116,7 +118,19 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		if (!javaFile.exists()) {
 			if (confirmCreation()) {
 				JavaCreationWizard wizard = new JavaCreationWizard();
-				wizard.setFileName(javaFileName);
+				if (javaFileName.indexOf(File.separator) == -1) {
+					wizard.setFileName(javaFileName);
+				} else {
+					wizard.setFileName(javaFileName
+							.substring(
+									javaFileName.indexOf(File.separator) + 1,
+									javaFileName.length()));
+				}
+				IResource parentResource = javaFile.getParent();
+				if (!parentResource.exists()
+						&& parentResource.getType() == IResource.FOLDER) {
+					createFolderRecursively((IFolder) parentResource);
+				}
 				wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(
 						javaFile));
 				WizardDialog dialog = new WizardDialog(getShell(), wizard);
