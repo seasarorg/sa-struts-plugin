@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.seasar.sastrutsplugin.feature_0.0.4.jar" id="org.seasar.sastrutsplugin.feature" version="0.0.4">
+   <feature url="features/org.seasar.sastrutsplugin.feature_0.0.5.jar" id="org.seasar.sastrutsplugin.feature" version="0.0.5">
       <category name="SAStrutsPlugin"/>
    </feature>
    <category-def name="SAStrutsPlugin" label="SAStrutsPlugin"/>
