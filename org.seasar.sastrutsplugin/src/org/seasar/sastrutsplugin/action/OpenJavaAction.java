@@ -152,8 +152,13 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			if (!StringUtil.isEmpty(actionAttribute)) {
 				IDOMNode formDomNode = (IDOMNode) formNode;
 				if (isMatchLineNumber(editor, formDomNode)) {
-					return new FormInfomation(actionAttribute,
-							SAStrutsConstants.INDEX);
+					if(actionAttribute.startsWith("/")) {
+						return new FormInfomation(actionAttribute,
+								SAStrutsConstants.INDEX);
+					} else {
+						return new FormInfomation(actionAttribute,
+								actionAttribute.substring(0,actionAttribute.indexOf("/")));
+					}
 				}
 				NodeList inputNodeList = ((Element) formNode)
 						.getElementsByTagName(SAStrutsConstants.INPUT);
