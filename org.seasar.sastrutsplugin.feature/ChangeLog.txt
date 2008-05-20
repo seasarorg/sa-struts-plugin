@@ -1,9 +1,10 @@
 SAStrutsPlugin 変更履歴
 
 * 0.0.5 [2008/05/20]
-[Improvement] Viewのプレフィックス対応(JSP→Javaで一部実装もれがありました)。 [SASTRUTS-48]
 [Bug] JSPを新規作成するときに親フォルダが自動的に計算されない問題を修正しました。 [SASTRUTS-49]
 [Bug] パスを分割した場合に処理がおかしい問題を修正しました。 [SASTRUTS-51]
+[Bug] Javaを新規作成するときに親フォルダが自動的に計算されない問題を修正しました。 [SASTRUTS-54]
+[Improvement] Viewのプレフィックス対応(JSP→Javaで一部実装もれがありました)。 [SASTRUTS-48]
 [Improvement] urlPattern対応。 [SASTRUTS-52]
 [Improvement] s:formのないJSPからでもActionに飛べるようにする。 [SASTRUTS-53]
 
