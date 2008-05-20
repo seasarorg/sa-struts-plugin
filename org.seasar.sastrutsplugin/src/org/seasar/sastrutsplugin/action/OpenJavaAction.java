@@ -87,7 +87,7 @@ public class OpenJavaAction extends AbstractOpenAction implements
 	public void run(IAction action) {
 		FormInfomation formInfomation = getFormInfomation();
 		if (formInfomation == null) {
-			return;
+			formInfomation = new FormInfomation(null, SAStrutsConstants.INDEX);
 		}
 		IFile jspFile = ((FileEditorInput) WorkbenchUtil.getActiveEditor()
 				.getEditorInput()).getFile();
@@ -152,12 +152,13 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			if (!StringUtil.isEmpty(actionAttribute)) {
 				IDOMNode formDomNode = (IDOMNode) formNode;
 				if (isMatchLineNumber(editor, formDomNode)) {
-					if(actionAttribute.startsWith("/")) {
+					if (actionAttribute.startsWith("/")) {
 						return new FormInfomation(actionAttribute,
 								SAStrutsConstants.INDEX);
 					} else {
 						return new FormInfomation(actionAttribute,
-								actionAttribute.substring(0,actionAttribute.indexOf("/")));
+								actionAttribute.substring(0, actionAttribute
+										.indexOf("/")));
 					}
 				}
 				NodeList inputNodeList = ((Element) formNode)
@@ -173,7 +174,12 @@ public class OpenJavaAction extends AbstractOpenAction implements
 						IDOMNode inputDomNode = (IDOMNode) inputNode;
 						if (isMatchLineNumber(editor, inputDomNode)) {
 							if (StringUtil.isEmpty(nameAttribute)) {
-								nameAttribute = SAStrutsConstants.SUBMIT;
+								if (actionAttribute.startsWith("/")) {
+									nameAttribute = SAStrutsConstants.SUBMIT;
+								} else {
+									nameAttribute = actionAttribute.substring(
+											0, actionAttribute.indexOf("/"));
+								}
 							}
 							return new FormInfomation(actionAttribute,
 									nameAttribute);
@@ -204,7 +210,8 @@ public class OpenJavaAction extends AbstractOpenAction implements
 	}
 
 	private String getJavaFileName(IFile jspFile, String actionAttribute) {
-		if (actionAttribute.startsWith("/")) {
+		if (!StringUtil.isEmpty(actionAttribute)
+				&& actionAttribute.startsWith("/")) {
 			String[] names = StringUtil.split(actionAttribute, "/");
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < names.length - 1; i++) {
@@ -227,7 +234,13 @@ public class OpenJavaAction extends AbstractOpenAction implements
 					+ webRoot.length() + 1, jspFilePath.length());
 			String componentName = jspFilePath.substring(0, jspFilePath
 					.lastIndexOf(File.separator));
-			return StringUtil.capitalize(componentName)
+			String[] names = StringUtil.split(componentName, File.separator);
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < names.length - 1; i++) {
+				sb.append(names[i]).append(File.separator);
+			}
+			return sb.toString()
+					+ StringUtil.capitalize(names[names.length - 1])
 					+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
 		}
 	}
