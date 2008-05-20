@@ -24,7 +24,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -118,6 +121,16 @@ public class OpenJspAction implements IEditorActionDelegate,
 					if (confirmCreation()) {
 						JspCreationWizard wizard = new JspCreationWizard();
 						wizard.setFileName(selectedElementText);
+						IResource parentResource = jspFile.getParent();
+						if (!parentResource.exists()
+								&& parentResource.getType() == IResource.FOLDER) {
+							try {
+								((IFolder) parentResource).create(false, true,
+										null);
+							} catch (CoreException e) {
+								LogUtil.log(Activator.getDefault(), e);
+							}
+						}
 						wizard.init(PlatformUI.getWorkbench(),
 								new StructuredSelection(jspFile));
 						WizardDialog dialog = new WizardDialog(getShell(),
