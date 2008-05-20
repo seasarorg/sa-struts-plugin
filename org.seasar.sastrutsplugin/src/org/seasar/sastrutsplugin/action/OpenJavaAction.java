@@ -77,8 +77,9 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
-		IEditorActionDelegate, IObjectActionDelegate {
+public class OpenJavaAction extends AbstractOpenAction implements
+		IWorkbenchWindowActionDelegate, IEditorActionDelegate,
+		IObjectActionDelegate {
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 	}
@@ -213,6 +214,10 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 			String projectPath = project.getFullPath().toOSString();
 			String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
 					project).getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT);
+			File webXmlFile = ((Path) project.getFile(
+					webRoot + SAStrutsConstants.WEB_INF_WEB_XML).getLocation())
+					.toFile();
+			webRoot += getViewPrefix(webXmlFile);
 			jspFilePath = jspFilePath.substring(projectPath.length()
 					+ webRoot.length() + 1, jspFilePath.length());
 			String componentName = jspFilePath.substring(0, jspFilePath
