@@ -87,7 +87,13 @@ public class OpenJavaAction extends AbstractOpenAction implements
 	public void run(IAction action) {
 		FormInfomation formInfomation = getFormInfomation();
 		if (formInfomation == null) {
-			formInfomation = new FormInfomation(null, SAStrutsConstants.INDEX);
+			String href = getHref();
+			if (StringUtil.isEmpty(href)) {
+				formInfomation = new FormInfomation(null,
+						SAStrutsConstants.INDEX);
+			} else {
+				formInfomation = new FormInfomation(null, href);
+			}
 		}
 		IFile jspFile = ((FileEditorInput) WorkbenchUtil.getActiveEditor()
 				.getEditorInput()).getFile();
@@ -135,6 +141,31 @@ public class OpenJavaAction extends AbstractOpenAction implements
 
 	private Shell getShell() {
 		return WorkbenchUtil.getWorkbenchWindow().getShell();
+	}
+
+	private String getHref() {
+		IEditorPart editor = WorkbenchUtil.getActiveEditor();
+		IStructuredModel model = (IStructuredModel) editor
+				.getAdapter(IStructuredModel.class);
+		IDOMDocument doc = ((IDOMModel) model).getDocument();
+		Element element = doc.getDocumentElement();
+		NodeList aNodeList = element
+				.getElementsByTagName(SAStrutsConstants.A_TAG);
+		for (int i = 0; i < aNodeList.getLength(); i++) {
+			Node aNode = aNodeList.item(i);
+			String hrefAttribute = ((Element) aNode)
+					.getAttribute(SAStrutsConstants.HREF_ATTRIBUTE);
+			if (!StringUtil.isEmpty(hrefAttribute)) {
+				IDOMNode aDomNode = (IDOMNode) aNode;
+				if (isMatchLineNumber(editor, aDomNode)) {
+					if (hrefAttribute.indexOf("/") != -1) {
+						return hrefAttribute.substring(0, hrefAttribute
+								.indexOf("/"));
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	private FormInfomation getFormInfomation() {

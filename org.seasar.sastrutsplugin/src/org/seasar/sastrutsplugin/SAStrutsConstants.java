@@ -70,4 +70,8 @@ public final class SAStrutsConstants {
 
 	public static final String PARAM_VALUE = "param-value";
 
+	public static final String A_TAG = "a";
+
+	public static final String HREF_ATTRIBUTE = "href";
+
 }
