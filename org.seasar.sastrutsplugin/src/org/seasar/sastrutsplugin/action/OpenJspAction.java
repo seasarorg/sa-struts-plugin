@@ -103,8 +103,22 @@ public class OpenJspAction implements IEditorActionDelegate,
 				if (selectedElementText.startsWith("/")) {
 					jspPath = selectedElementText;
 				} else {
-					jspPath = getActionPath(componentName)
-							+ selectedElementText;
+					int start = className
+							.indexOf(SAStrutsConstants.LOWER_CASE_ACTION)
+							+ SAStrutsConstants.LOWER_CASE_ACTION.length() + 1;
+					int end = className.lastIndexOf(".");
+					String subAppName = null;
+					if (start < end) {
+						subAppName = className.substring(start, end);
+					}
+					if (StringUtil.isEmpty(subAppName)) {
+						jspPath = getActionPath(componentName)
+								+ selectedElementText;
+					} else {
+						jspPath = "/" + subAppName
+								+ getActionPath(componentName)
+								+ selectedElementText;
+					}
 				}
 				IFile file = ((FileEditorInput) editor.getEditorInput())
 						.getFile();
@@ -124,12 +138,7 @@ public class OpenJspAction implements IEditorActionDelegate,
 						IResource parentResource = jspFile.getParent();
 						if (!parentResource.exists()
 								&& parentResource.getType() == IResource.FOLDER) {
-							try {
-								((IFolder) parentResource).create(false, true,
-										null);
-							} catch (CoreException e) {
-								LogUtil.log(Activator.getDefault(), e);
-							}
+							createFolderRecursively((IFolder) parentResource);
 						}
 						wizard.init(PlatformUI.getWorkbench(),
 								new StructuredSelection(jspFile));
@@ -141,6 +150,17 @@ public class OpenJspAction implements IEditorActionDelegate,
 					IDEUtil.openEditor(jspFile);
 				}
 			}
+		}
+	}
+
+	private void createFolderRecursively(IFolder folder) {
+		if (!folder.getParent().exists()) {
+			createFolderRecursively((IFolder) folder.getParent());
+		}
+		try {
+			folder.create(false, true, null);
+		} catch (CoreException e) {
+			LogUtil.log(Activator.getDefault(), e);
 		}
 	}
 

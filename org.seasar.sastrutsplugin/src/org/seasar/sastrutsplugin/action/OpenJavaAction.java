@@ -199,20 +199,14 @@ public class OpenJavaAction implements IWorkbenchWindowActionDelegate,
 
 	private String getJavaFileName(IFile jspFile, String actionAttribute) {
 		if (actionAttribute.startsWith("/")) {
-			if (actionAttribute.lastIndexOf('/') == 0) {
-				return StringUtil.capitalize(actionAttribute.substring(1))
-						+ SAStrutsConstants.ACTION
-						+ SAStrutsConstants.JAVA_SUFFIX;
-			} else {
-				String subAppName = actionAttribute.substring(1,
-						actionAttribute.lastIndexOf('/'));
-				return subAppName
-						+ "/"
-						+ StringUtil.capitalize(actionAttribute.substring(1,
-								actionAttribute.lastIndexOf('/')))
-						+ SAStrutsConstants.ACTION
-						+ SAStrutsConstants.JAVA_SUFFIX;
+			String[] names = StringUtil.split(actionAttribute, "/");
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < names.length - 1; i++) {
+				sb.append(names[i]).append('/');
 			}
+			return sb.toString()
+					+ StringUtil.capitalize(names[names.length - 1])
+					+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
 		} else {
 			IProject project = jspFile.getProject();
 			String jspFilePath = jspFile.getFullPath().toOSString();

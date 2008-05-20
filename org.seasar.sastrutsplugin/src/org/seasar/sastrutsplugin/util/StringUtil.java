@@ -15,11 +15,20 @@
  */
 package org.seasar.sastrutsplugin.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 /**
  * {@link String}用のユーティリティクラスです。
  * 
  */
 public final class StringUtil {
+
+	/**
+	 * 空の文字列の配列です。
+	 */
+	public static final String[] EMPTY_STRINGS = new String[0];
 
 	/**
 	 * 
@@ -36,6 +45,27 @@ public final class StringUtil {
 	 */
 	public static final boolean isEmpty(final String text) {
 		return text == null || text.length() == 0;
+	}
+
+	/**
+	 * 文字列を分割します。
+	 * 
+	 * @param str
+	 *            文字列
+	 * @param delim
+	 *            分割するためのデリミタ
+	 * @return 分割された文字列の配列
+	 */
+	public static String[] split(final String str, final String delim) {
+		if (isEmpty(str)) {
+			return EMPTY_STRINGS;
+		}
+		List list = new ArrayList();
+		StringTokenizer st = new StringTokenizer(str, delim);
+		while (st.hasMoreElements()) {
+			list.add(st.nextElement());
+		}
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 
 	/**
