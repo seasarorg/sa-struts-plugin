@@ -46,7 +46,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -151,10 +150,6 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		String title = Messages.JAVA_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
 		String msg = Messages.JAVA_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
 		return MessageDialog.openConfirm(getShell(), title, msg);
-	}
-
-	private Shell getShell() {
-		return WorkbenchUtil.getWorkbenchWindow().getShell();
 	}
 
 	private String getHref() {
@@ -269,14 +264,12 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			IProject project = jspFile.getProject();
 			String jspFilePath = jspFile.getFullPath().toOSString();
 			String projectPath = project.getFullPath().toOSString();
-			String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
-					project).getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT);
-			File webXmlFile = ((Path) project.getFile(
-					webRoot + SAStrutsConstants.WEB_INF_WEB_XML).getLocation())
-					.toFile();
-			webRoot += getViewPrefix(webXmlFile);
+			String webRootViewPrefix = getWebRootViewPrefix(project);
+			if (StringUtil.isEmpty(webRootViewPrefix)) {
+				return null;
+			}
 			jspFilePath = jspFilePath.substring(projectPath.length()
-					+ webRoot.length() + 1, jspFilePath.length());
+					+ webRootViewPrefix.length() + 1, jspFilePath.length());
 			String componentName = jspFilePath.substring(0, jspFilePath
 					.lastIndexOf(File.separator));
 			String[] names = StringUtil.split(componentName, File.separator);
@@ -355,16 +348,22 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			}
 		} catch (XPathExpressionException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		} catch (DOMException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		} catch (ParserConfigurationException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		} catch (SAXException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		} catch (IOException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		} catch (JavaModelException e) {
 			LogUtil.log(Activator.getDefault(), e);
+			showConventionDiconAnalyzeErrorDialog(e);
 		}
 		return null;
 	}

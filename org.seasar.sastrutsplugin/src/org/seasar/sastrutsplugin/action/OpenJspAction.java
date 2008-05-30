@@ -16,13 +16,10 @@
 
 package org.seasar.sastrutsplugin.action;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
@@ -37,7 +34,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -45,15 +41,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
-import org.seasar.sastrutsplugin.Activator;
 import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.naming.AutoNaming;
 import org.seasar.sastrutsplugin.naming.DefaultAutoNaming;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.IDEUtil;
-import org.seasar.sastrutsplugin.util.PreferencesUtil;
 import org.seasar.sastrutsplugin.util.StringUtil;
 import org.seasar.sastrutsplugin.wizard.JspCreationWizard;
 
@@ -111,14 +104,11 @@ public class OpenJspAction extends AbstractOpenAction implements
 				IFile file = ((FileEditorInput) editor.getEditorInput())
 						.getFile();
 				IProject project = file.getProject();
-				String webRoot = PreferencesUtil.getPreferenceStoreOfProject(
-						project).getString(
-						SAStrutsConstants.PREF_WEBCONTENTS_ROOT);
-				File webXmlFile = ((Path) project.getFile(
-						webRoot + SAStrutsConstants.WEB_INF_WEB_XML)
-						.getLocation()).toFile();
-				IFile jspFile = project.getFile(webRoot
-						+ getViewPrefix(webXmlFile) + jspPath);
+				String webRootViewPrefix = getWebRootViewPrefix(project);
+				if (StringUtil.isEmpty(webRootViewPrefix)) {
+					return;
+				}
+				IFile jspFile = project.getFile(webRootViewPrefix + jspPath);
 				if (!jspFile.exists()) {
 					if (confirmCreation()) {
 						JspCreationWizard wizard = new JspCreationWizard();
@@ -178,10 +168,6 @@ public class OpenJspAction extends AbstractOpenAction implements
 		String title = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
 		String msg = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
 		return MessageDialog.openConfirm(getShell(), title, msg);
-	}
-
-	private Shell getShell() {
-		return WorkbenchUtil.getWorkbenchWindow().getShell();
 	}
 
 	private static NLSLine[] createRawLines(ICompilationUnit cu) {
