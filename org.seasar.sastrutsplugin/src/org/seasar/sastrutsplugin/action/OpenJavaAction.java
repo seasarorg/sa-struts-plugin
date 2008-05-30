@@ -189,41 +189,40 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			Node formNode = formNodeList.item(i);
 			String actionAttribute = ((Element) formNode)
 					.getAttribute(SAStrutsConstants.LOWER_CASE_ACTION);
-			if (!StringUtil.isEmpty(actionAttribute)) {
-				IDOMNode formDomNode = (IDOMNode) formNode;
-				if (isMatchLineNumber(editor, formDomNode)) {
-					if (actionAttribute.startsWith("/")) {
-						return new FormInfomation(actionAttribute,
-								SAStrutsConstants.INDEX);
-					} else {
-						return new FormInfomation(actionAttribute,
-								actionAttribute.substring(0, actionAttribute
-										.indexOf("/")));
-					}
+			IDOMNode formDomNode = (IDOMNode) formNode;
+			if (isMatchLineNumber(editor, formDomNode)) {
+				if (StringUtil.isEmpty(actionAttribute)
+						|| actionAttribute.startsWith("/")) {
+					return new FormInfomation(actionAttribute,
+							SAStrutsConstants.INDEX);
+				} else {
+					return new FormInfomation(actionAttribute, actionAttribute
+							.substring(0, actionAttribute.indexOf("/")));
 				}
-				NodeList inputNodeList = ((Element) formNode)
-						.getElementsByTagName(SAStrutsConstants.INPUT);
-				for (int j = 0; j < inputNodeList.getLength(); j++) {
-					Node inputNode = inputNodeList.item(j);
-					String typeAttribute = ((Element) inputNode)
-							.getAttribute(SAStrutsConstants.TYPE);
-					if (!StringUtil.isEmpty(typeAttribute)
-							&& typeAttribute.equals(SAStrutsConstants.SUBMIT)) {
-						String nameAttribute = ((Element) inputNode)
-								.getAttribute(SAStrutsConstants.NAME);
-						IDOMNode inputDomNode = (IDOMNode) inputNode;
-						if (isMatchLineNumber(editor, inputDomNode)) {
-							if (StringUtil.isEmpty(nameAttribute)) {
-								if (actionAttribute.startsWith("/")) {
-									nameAttribute = SAStrutsConstants.SUBMIT;
-								} else {
-									nameAttribute = actionAttribute.substring(
-											0, actionAttribute.indexOf("/"));
-								}
+			}
+			NodeList inputNodeList = ((Element) formNode)
+					.getElementsByTagName(SAStrutsConstants.INPUT);
+			for (int j = 0; j < inputNodeList.getLength(); j++) {
+				Node inputNode = inputNodeList.item(j);
+				String typeAttribute = ((Element) inputNode)
+						.getAttribute(SAStrutsConstants.TYPE);
+				if (!StringUtil.isEmpty(typeAttribute)
+						&& typeAttribute.equals(SAStrutsConstants.SUBMIT)) {
+					String nameAttribute = ((Element) inputNode)
+							.getAttribute(SAStrutsConstants.NAME);
+					IDOMNode inputDomNode = (IDOMNode) inputNode;
+					if (isMatchLineNumber(editor, inputDomNode)) {
+						if (StringUtil.isEmpty(nameAttribute)) {
+							if (StringUtil.isEmpty(actionAttribute)
+									|| actionAttribute.startsWith("/")) {
+								nameAttribute = SAStrutsConstants.SUBMIT;
+							} else {
+								nameAttribute = actionAttribute.substring(0,
+										actionAttribute.indexOf("/"));
 							}
-							return new FormInfomation(actionAttribute,
-									nameAttribute);
 						}
+						return new FormInfomation(actionAttribute,
+								nameAttribute);
 					}
 				}
 			}
