@@ -70,15 +70,12 @@ public class IDEUtil {
 		IWorkbenchPage page = window.getActivePage();
 		if (page != null) {
 			try {
-				if (StringUtil.isEmpty(methodName)) {
-					return IDE.openEditor(page, file);
-				}
 				ICompilationUnit compilationUnit = JavaCore
 						.createCompilationUnitFrom(file);
-				String className = compilationUnit.findPrimaryType()
-						.getFullyQualifiedName();
-				IJavaProject javaProject = JavaCore.create(file.getProject());
-				IType type = javaProject.findType(className);
+				IType type = compilationUnit.findPrimaryType();
+				if(type == null) {
+					return IDE.openEditor(page, file);
+				}
 				IMethod method = type.getMethod(methodName, null);
 				if (!method.exists()) {
 					method = type.getMethod(SAStrutsConstants.INDEX, null);
