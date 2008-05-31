@@ -103,7 +103,6 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		if (StringUtil.isEmpty(rootPackageName)) {
 			return;
 		}
-
 		String[] splitSubApplications = getSplitSubApplications(jspFile,
 				formInfomation.actionAttribute);
 		if (splitSubApplications == null) {

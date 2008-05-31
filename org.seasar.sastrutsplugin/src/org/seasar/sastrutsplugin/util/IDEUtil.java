@@ -73,7 +73,7 @@ public class IDEUtil {
 				ICompilationUnit compilationUnit = JavaCore
 						.createCompilationUnitFrom(file);
 				IType type = compilationUnit.findPrimaryType();
-				if(type == null) {
+				if (type == null) {
 					return IDE.openEditor(page, file);
 				}
 				IMethod method = type.getMethod(methodName, null);

@@ -35,7 +35,7 @@ public final class SAStrutsConstants {
 	public static final String LOWER_CASE_ACTION = "action";
 
 	public static final String INDEX_ACTION = "indexAction";
-	
+
 	public static final String CAPITALIZE_INDEX_ACTION = "IndexAction";
 
 	public static final String JSP_SUFFIX = ".jsp";

@@ -72,9 +72,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		webRootLabel.setText(Messages.PROPERTY_PAGE_WEBAPP_ROOT);
 		webRoot = new Text(composite, SWT.BORDER);
 		webRoot.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		webRoot
-				.setText(store
-						.getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT));
+		webRoot.setText(store
+				.getString(SAStrutsConstants.PREF_WEBCONTENTS_ROOT));
 
 		Button webRootBotton = new Button(composite, SWT.BUTTON1);
 		webRootBotton.setText(Messages.PROPERTY_PAGE_BROWSE);
