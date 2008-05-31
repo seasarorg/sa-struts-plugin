@@ -103,28 +103,19 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		if (StringUtil.isEmpty(rootPackageName)) {
 			return;
 		}
-		String javaFileName = getJavaFileName(jspFile,
+
+		String[] splitSubApplications = getSplitSubApplications(jspFile,
 				formInfomation.actionAttribute);
-		if (StringUtil.isEmpty(javaFileName)) {
+		if (splitSubApplications == null) {
 			return;
 		}
-		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
-				project).getString(SAStrutsConstants.PREF_MAIN_JAVA_PATH);
-		IFile javaFile = project.getFile(mainJavaPath + File.separator
-				+ rootPackageName.replace('.', '/') + File.separator
-				+ SAStrutsConstants.LOWER_CASE_ACTION + File.separator
-				+ javaFileName);
+		IFile javaFile = getJavaFile(rootPackageName, jspFile,
+				splitSubApplications);
 		if (!javaFile.exists()) {
 			if (confirmCreation()) {
 				JavaCreationWizard wizard = new JavaCreationWizard();
-				if (javaFileName.indexOf(File.separator) == -1) {
-					wizard.setFileName(javaFileName);
-				} else {
-					wizard.setFileName(javaFileName
-							.substring(
-									javaFileName.indexOf(File.separator) + 1,
-									javaFileName.length()));
-				}
+				String javaFileName = javaFile.getName();
+				wizard.setFileName(javaFileName);
 				IResource parentResource = javaFile.getParent();
 				if (!parentResource.exists()
 						&& parentResource.getType() == IResource.FOLDER) {
@@ -248,17 +239,12 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		}
 	}
 
-	private String getJavaFileName(IFile jspFile, String actionAttribute) {
+	private String[] getSplitSubApplications(IFile jspFile,
+			String actionAttribute) {
+		String[] names = null;
 		if (!StringUtil.isEmpty(actionAttribute)
 				&& actionAttribute.startsWith("/")) {
-			String[] names = StringUtil.split(actionAttribute, "/");
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < names.length - 1; i++) {
-				sb.append(names[i]).append('/');
-			}
-			return sb.toString()
-					+ StringUtil.capitalize(names[names.length - 1])
-					+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
+			names = StringUtil.split(actionAttribute, "/");
 		} else {
 			IProject project = jspFile.getProject();
 			String jspFilePath = jspFile.getFullPath().toOSString();
@@ -271,14 +257,44 @@ public class OpenJavaAction extends AbstractOpenAction implements
 					+ webRootViewPrefix.length() + 1, jspFilePath.length());
 			String componentName = jspFilePath.substring(0, jspFilePath
 					.lastIndexOf(File.separator));
-			String[] names = StringUtil.split(componentName, File.separator);
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < names.length - 1; i++) {
-				sb.append(names[i]).append(File.separator);
-			}
-			return sb.toString()
-					+ StringUtil.capitalize(names[names.length - 1])
-					+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
+			names = StringUtil.split(componentName, File.separator);
+		}
+		return names;
+	}
+
+	private IFile getJavaFile(String rootPackageName, IFile jspFile,
+			String[] splitSubApplications) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < splitSubApplications.length - 1; i++) {
+			sb.append(splitSubApplications[i]).append(File.separator);
+		}
+		String firstCandidateAction = sb.toString()
+				+ StringUtil
+						.capitalize(splitSubApplications[splitSubApplications.length - 1])
+				+ SAStrutsConstants.ACTION + SAStrutsConstants.JAVA_SUFFIX;
+		String secondCandidateAction = sb.toString()
+				+ splitSubApplications[splitSubApplications.length - 1]
+				+ File.separator + SAStrutsConstants.CAPITALIZE_INDEX_ACTION
+				+ SAStrutsConstants.JAVA_SUFFIX;
+		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
+				jspFile.getProject()).getString(
+				SAStrutsConstants.PREF_MAIN_JAVA_PATH);
+		IFile firstCandidateJavaFile = jspFile.getProject().getFile(
+				mainJavaPath + File.separator
+						+ rootPackageName.replace('.', '/') + File.separator
+						+ SAStrutsConstants.LOWER_CASE_ACTION + File.separator
+						+ firstCandidateAction);
+		IFile secondCandidateJavaFile = jspFile.getProject().getFile(
+				mainJavaPath + File.separator
+						+ rootPackageName.replace('.', '/') + File.separator
+						+ SAStrutsConstants.LOWER_CASE_ACTION + File.separator
+						+ secondCandidateAction);
+		if (firstCandidateJavaFile.exists()) {
+			return firstCandidateJavaFile;
+		} else if (secondCandidateJavaFile.exists()) {
+			return secondCandidateJavaFile;
+		} else {
+			return firstCandidateJavaFile;
 		}
 	}
 
