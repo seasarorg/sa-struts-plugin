@@ -26,42 +26,42 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class AdaptableUtil {
 
-    public static ITextEditor toTextEditor(Object adaptable) {
-        ITextEditor result = null;
-        if (adaptable instanceof ITextEditor) {
-            result = (ITextEditor) adaptable;
-        } else if (adaptable instanceof IAdaptable) {
-            IAdaptable a = (IAdaptable) adaptable;
-            result = (ITextEditor) a.getAdapter(ITextEditor.class);
-        }
-        return result;
-    }
+	public static ITextEditor toTextEditor(Object adaptable) {
+		ITextEditor result = null;
+		if (adaptable instanceof ITextEditor) {
+			result = (ITextEditor) adaptable;
+		} else if (adaptable instanceof IAdaptable) {
+			IAdaptable a = (IAdaptable) adaptable;
+			result = (ITextEditor) a.getAdapter(ITextEditor.class);
+		}
+		return result;
+	}
 
-    public static IResource toResource(Object adaptable) {
-        IResource result = null;
-        if (adaptable instanceof IResource) {
-            result = (IResource) adaptable;
-        } else if (adaptable instanceof IAdaptable) {
-            IAdaptable a = (IAdaptable) adaptable;
-            result = (IResource) a.getAdapter(IResource.class);
-        }
-        return result;
-    }
+	public static IResource toResource(Object adaptable) {
+		IResource result = null;
+		if (adaptable instanceof IResource) {
+			result = (IResource) adaptable;
+		} else if (adaptable instanceof IAdaptable) {
+			IAdaptable a = (IAdaptable) adaptable;
+			result = (IResource) a.getAdapter(IResource.class);
+		}
+		return result;
+	}
 
-    public static IProject toProject(Object adaptable) {
-        IProject result = null;
-        if (adaptable instanceof IProject) {
-            result = (IProject) adaptable;
-        } else if (adaptable instanceof IAdaptable) {
-            IAdaptable a = (IAdaptable) adaptable;
-            result = (IProject) a.getAdapter(IProject.class);
-        }
-        if (result == null) {
-            IResource r = toResource(adaptable);
-            if (r != null) {
-                result = r.getProject();
-            }
-        }
-        return result;
-    }
+	public static IProject toProject(Object adaptable) {
+		IProject result = null;
+		if (adaptable instanceof IProject) {
+			result = (IProject) adaptable;
+		} else if (adaptable instanceof IAdaptable) {
+			IAdaptable a = (IAdaptable) adaptable;
+			result = (IProject) a.getAdapter(IProject.class);
+		}
+		if (result == null) {
+			IResource r = toResource(adaptable);
+			if (r != null) {
+				result = r.getProject();
+			}
+		}
+		return result;
+	}
 }

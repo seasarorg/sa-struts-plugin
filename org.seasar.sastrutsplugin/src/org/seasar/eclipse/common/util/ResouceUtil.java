@@ -29,30 +29,30 @@ import org.eclipse.ui.IWorkbenchWindow;
  */
 public class ResouceUtil {
 
-    public static IResource getCurrentSelectedResouce() {
-        IResource result = null;
-        IWorkbenchWindow window = WorkbenchUtil.getWorkbenchWindow();
-        if (window != null) {
-            IWorkbenchPage page = window.getActivePage();
-            if (page != null) {
-                // getActiveEditorで取れる参照は、フォーカスがどこにあってもアクティブなエディタの参照が取れてしまう為。
-                IWorkbenchPart part = page.getActivePart();
-                if (part instanceof IEditorPart) {
-                    IEditorPart editor = (IEditorPart) part;
-                    result = AdaptableUtil.toResource(editor.getEditorInput());
-                }
-            }
-            if (result == null) {
-                ISelection selection = window.getSelectionService()
-                        .getSelection();
-                if (selection instanceof IStructuredSelection) {
-                    IStructuredSelection ss = (IStructuredSelection) selection;
-                    Object o = ss.getFirstElement();
-                    result = AdaptableUtil.toResource(o);
-                }
-            }
-        }
-        return result;
-    }
+	public static IResource getCurrentSelectedResouce() {
+		IResource result = null;
+		IWorkbenchWindow window = WorkbenchUtil.getWorkbenchWindow();
+		if (window != null) {
+			IWorkbenchPage page = window.getActivePage();
+			if (page != null) {
+				// getActiveEditorで取れる参照は、フォーカスがどこにあってもアクティブなエディタの参照が取れてしまう為。
+				IWorkbenchPart part = page.getActivePart();
+				if (part instanceof IEditorPart) {
+					IEditorPart editor = (IEditorPart) part;
+					result = AdaptableUtil.toResource(editor.getEditorInput());
+				}
+			}
+			if (result == null) {
+				ISelection selection = window.getSelectionService()
+						.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					IStructuredSelection ss = (IStructuredSelection) selection;
+					Object o = ss.getFirstElement();
+					result = AdaptableUtil.toResource(o);
+				}
+			}
+		}
+		return result;
+	}
 
 }
