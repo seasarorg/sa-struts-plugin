@@ -34,6 +34,8 @@ public class SAStrutsPreferenceInitializer extends
 				SAStrutsConstants.PREF_DEFAULT_MAIN_JAVA_PATH);
 		store.setDefault(SAStrutsConstants.PREF_CONVENTION_DICON_PATH,
 				SAStrutsConstants.PREF_DEFAULT_CONVENTION_DICON_PATH);
+		store.setDefault(SAStrutsConstants.PREF_WEBSERVER,
+				SAStrutsConstants.PREF_DEFAULT_WEBSERVER);
 	}
 
 }

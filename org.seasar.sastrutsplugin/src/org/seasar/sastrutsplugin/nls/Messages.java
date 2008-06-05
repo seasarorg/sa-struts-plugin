@@ -67,5 +67,9 @@ public class Messages extends NLS {
 
 	public static String ERROR_DIALOG_CONVENTION_DICON_ANALYZE_ERROR_TITLE;
 
+	public static String PROPERTY_PAGE_WEB_SERVER;
+
+	public static String PROPERTY_PAGE_ERROR_MESSAGE_WEB_SERVER;
+
 	public static String ERROR_DIALOG_CONVENTION_DICONANALYZE_ERROR_MESSAGE;
 }

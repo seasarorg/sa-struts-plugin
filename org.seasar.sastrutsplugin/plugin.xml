@@ -25,6 +25,24 @@
                menubarPath="additions">
          </action>
       </viewerContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.seasar.sastrutsplugin.objectContribution"
+            nameFilter="*Action.java"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               id="org.seasar.sastrutsplugin.menu"
+               label="SAStruts"
+               path="additions">
+         </menu>
+         <action
+               class="org.seasar.sastrutsplugin.action.ViewOnServerAction"
+               enablesFor="1"
+               icon="icons/browser.gif"
+               id="org.seasar.sastrutsplugin.object.ViewOnServerAction"
+               label="View on Server"
+               menubarPath="org.seasar.sastrutsplugin.menu/additions"/>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">

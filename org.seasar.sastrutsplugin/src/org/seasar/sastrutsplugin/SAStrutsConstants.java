@@ -30,6 +30,10 @@ public final class SAStrutsConstants {
 
 	public static final String PREF_DEFAULT_CONVENTION_DICON_PATH = "/src/main/resources/convention.dicon";
 
+	public static final String PREF_WEBSERVER = "WebServer";
+
+	public static final String PREF_DEFAULT_WEBSERVER = "http://localhost:8080";
+
 	public static final String ACTION = "Action";
 
 	public static final String LOWER_CASE_ACTION = "action";

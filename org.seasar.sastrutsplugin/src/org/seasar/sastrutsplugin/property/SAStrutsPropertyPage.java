@@ -16,13 +16,18 @@
 
 package org.seasar.sastrutsplugin.property;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -45,11 +50,16 @@ import org.seasar.sastrutsplugin.util.PreferencesUtil;
 public class SAStrutsPropertyPage extends PropertyPage implements
 		IWorkbenchPropertyPage {
 
+	private Pattern httpUrl = Pattern
+			.compile("https?://[-_.!~*'()a-zA-Z0-9;/?:\\@&=+\\$,%#]+");
+
 	private Text webRoot;
 
 	private Text mainJavaPath;
 
 	private Text conventionDiconPath;
+
+	private Text webServer;
 
 	public SAStrutsPropertyPage() {
 		super();
@@ -112,6 +122,26 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		conventionDiconPathButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				chooseFile(conventionDiconPath);
+			}
+		});
+
+		Label webServerLabel = new Label(composite, SWT.NONE);
+		webServerLabel.setText(Messages.PROPERTY_PAGE_WEB_SERVER);
+		webServer = new Text(composite, SWT.SINGLE | SWT.BORDER);
+		webServer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		webServer.setText(store.getString(SAStrutsConstants.PREF_WEBSERVER));
+		this.webServer.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				String port = webServer.getText();
+				boolean is = httpUrl.matcher(port).matches();
+				if (is) {
+					setErrorMessage(null);
+				} else {
+					setErrorMessage(NLS.bind(
+							Messages.PROPERTY_PAGE_ERROR_MESSAGE_WEB_SERVER,
+							"WebServer"));
+				}
+				setValid(is);
 			}
 		});
 
@@ -187,6 +217,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		getPreferenceStore().setValue(
 				SAStrutsConstants.PREF_CONVENTION_DICON_PATH,
 				conventionDiconPath.getText());
+		getPreferenceStore().setValue(SAStrutsConstants.PREF_WEBSERVER,
+				webServer.getText());
 		return true;
 	}
 
@@ -195,6 +227,7 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		mainJavaPath.setText(SAStrutsConstants.PREF_DEFAULT_MAIN_JAVA_PATH);
 		conventionDiconPath
 				.setText(SAStrutsConstants.PREF_DEFAULT_CONVENTION_DICON_PATH);
+		webServer.setText(SAStrutsConstants.PREF_DEFAULT_WEBSERVER);
 	}
 
 }
