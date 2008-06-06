@@ -113,8 +113,8 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		if (!javaFile.exists()) {
 			if (confirmCreation()) {
 				JavaCreationWizard wizard = new JavaCreationWizard();
-				String javaFileName = javaFile.getName();
-				wizard.setFileName(javaFileName);
+				wizard.setJavaFile(javaFile);
+				wizard.setJspFile(jspFile);
 				IResource parentResource = javaFile.getParent();
 				if (!parentResource.exists()
 						&& parentResource.getType() == IResource.FOLDER) {

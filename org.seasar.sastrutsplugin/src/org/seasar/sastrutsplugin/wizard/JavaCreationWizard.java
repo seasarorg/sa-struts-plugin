@@ -16,6 +16,7 @@
 
 package org.seasar.sastrutsplugin.wizard;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -27,7 +28,8 @@ public class JavaCreationWizard extends Wizard implements INewWizard {
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
 	private JavaCreationWizardPage mainPage;
-	private String fileName;
+	private IFile javaFile;
+	private IFile jspFile;
 
 	@Override
 	public boolean performFinish() {
@@ -40,13 +42,26 @@ public class JavaCreationWizard extends Wizard implements INewWizard {
 		this.selection = selection;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	/**
+	 * @param javaFile
+	 *            the javaFile to set
+	 */
+	public void setJavaFile(IFile javaFile) {
+		this.javaFile = javaFile;
+	}
+
+	/**
+	 * @param jspFile
+	 *            the jspFile to set
+	 */
+	public void setJspFile(IFile jspFile) {
+		this.jspFile = jspFile;
 	}
 
 	public void addPages() {
-		mainPage = new JavaCreationWizardPage(workbench, selection);
-		mainPage.setFileName(fileName);
+		mainPage = new JavaCreationWizardPage(workbench, selection, javaFile,
+				jspFile);
+		mainPage.setFileName(javaFile.getName());
 		addPage(mainPage);
 	}
 
