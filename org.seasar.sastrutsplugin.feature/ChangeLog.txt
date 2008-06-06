@@ -1,5 +1,13 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.6 [2008/06/06]
+[Bug] web.xmlのcontext-param要素が無い場合にActionへの遷移がおかしい問題を修正しました。 [SASTRUTS-60] [seasar-dev:828]
+[Bug] 空のActionに飛べない問題を修正しました。 [SASTRUTS-64]
+[Improvement] action要素が無くてinputタグの行で操作した場合に該当メソッドに飛べるようにする。 [SASTRUTS-61] [seasar-dev:828]
+[Improvement] ネストしたIndexAction対応。 [SASTRUTS-63] [seasar-dev:828]
+[New Feature] View on Server機能。 [SASTRUTS-66] [seasar-dev:828]
+[New Feature] Actionクラスの雛形を作成する。 [SASTRUTS-67] [seasar-dev:828]
+
 * 0.0.5 [2008/05/20]
 [Bug] JSPを新規作成するときに親フォルダが自動的に計算されない問題を修正しました。 [SASTRUTS-49]
 [Bug] パスを分割した場合に処理がおかしい問題を修正しました。 [SASTRUTS-51]
