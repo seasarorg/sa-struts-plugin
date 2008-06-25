@@ -96,7 +96,7 @@ public class OpenJspAction extends AbstractOpenAction implements
 						jspPath = getActionPath(componentName)
 								+ selectedElementText;
 					} else {
-						jspPath = "/" + subAppName
+						jspPath = "/" + subAppName.replace('.', '/')
 								+ getActionPath(componentName)
 								+ selectedElementText;
 					}
