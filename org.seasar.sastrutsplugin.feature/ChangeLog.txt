@@ -1,5 +1,9 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.7 [2008/06/27]
+[Bug] 2段以上ネストしたアクションからJSPファイルを作成する際のフォルダパスがおかしい問題を修正しました。 [SASTRUTS-72] [Seasar-user:14807]
+[Improvement] SAStrutsPluginのキーバインディングの変更（F6,F7→Ctrl+8） [SASTRUTS-73] [Seasar-user:14814] 
+
 * 0.0.6 [2008/06/06]
 [Bug] web.xmlのcontext-param要素が無い場合にActionへの遷移がおかしい問題を修正しました。 [SASTRUTS-60] [seasar-dev:828]
 [Bug] 空のActionに飛べない問題を修正しました。 [SASTRUTS-64]
