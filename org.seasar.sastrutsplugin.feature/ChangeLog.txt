@@ -1,5 +1,8 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.8 [2008/08/11]
+[Bug] WEB-INF/view/index.jspからIndexActionへ遷移できない問題を修正しました。 [SASTRUTS-89] [seasar-dev:881]
+
 * 0.0.7 [2008/06/27]
 [Bug] 2段以上ネストしたアクションからJSPファイルを作成する際のフォルダパスがおかしい問題を修正しました。 [SASTRUTS-72] [Seasar-user:14807]
 [Improvement] SAStrutsPluginのキーバインディングの変更（F6,F7→Ctrl+8） [SASTRUTS-73] [Seasar-user:14814] 
