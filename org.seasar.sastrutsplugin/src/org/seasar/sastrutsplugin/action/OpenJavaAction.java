@@ -103,11 +103,12 @@ public class OpenJavaAction extends AbstractOpenAction implements
 		if (StringUtil.isEmpty(rootPackageName)) {
 			return;
 		}
-		String[] splitSubApplications = getSplitSubApplications(jspFile,
-				formInfomation.actionAttribute);
-		if (splitSubApplications == null) {
+		String webRootViewPrefix = getWebRootViewPrefix(project);
+		if (StringUtil.isEmpty(webRootViewPrefix)) {
 			return;
 		}
+		String[] splitSubApplications = getSplitSubApplications(jspFile,
+				formInfomation.actionAttribute, webRootViewPrefix);
 		IFile javaFile = getJavaFile(rootPackageName, jspFile,
 				splitSubApplications);
 		if (!javaFile.exists()) {
@@ -239,7 +240,7 @@ public class OpenJavaAction extends AbstractOpenAction implements
 	}
 
 	private String[] getSplitSubApplications(IFile jspFile,
-			String actionAttribute) {
+			String actionAttribute, String webRootViewPrefix) {
 		String[] names = null;
 		if (!StringUtil.isEmpty(actionAttribute)
 				&& actionAttribute.startsWith("/")) {
@@ -248,21 +249,35 @@ public class OpenJavaAction extends AbstractOpenAction implements
 			IProject project = jspFile.getProject();
 			String jspFilePath = jspFile.getFullPath().toOSString();
 			String projectPath = project.getFullPath().toOSString();
-			String webRootViewPrefix = getWebRootViewPrefix(project);
-			if (StringUtil.isEmpty(webRootViewPrefix)) {
-				return null;
-			}
 			jspFilePath = jspFilePath.substring(projectPath.length()
 					+ webRootViewPrefix.length() + 1, jspFilePath.length());
-			String componentName = jspFilePath.substring(0, jspFilePath
-					.lastIndexOf(File.separator));
-			names = StringUtil.split(componentName, File.separator);
+			int lastIndexOf = jspFilePath.lastIndexOf(File.separator);
+			if (lastIndexOf == -1) {
+				return null;
+			} else {
+				String componentName = jspFilePath.substring(0, lastIndexOf);
+				names = StringUtil.split(componentName, File.separator);
+			}
 		}
 		return names;
 	}
 
 	private IFile getJavaFile(String rootPackageName, IFile jspFile,
 			String[] splitSubApplications) {
+		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
+				jspFile.getProject()).getString(
+				SAStrutsConstants.PREF_MAIN_JAVA_PATH);
+		if (splitSubApplications == null) {
+			IFile indexActionJavaFile = jspFile.getProject().getFile(
+					mainJavaPath + File.separator
+							+ rootPackageName.replace('.', '/')
+							+ File.separator
+							+ SAStrutsConstants.LOWER_CASE_ACTION
+							+ File.separator
+							+ SAStrutsConstants.CAPITALIZE_INDEX_ACTION
+							+ SAStrutsConstants.JAVA_SUFFIX);
+			return indexActionJavaFile;
+		}
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < splitSubApplications.length - 1; i++) {
 			sb.append(splitSubApplications[i]).append(File.separator);
@@ -275,9 +290,6 @@ public class OpenJavaAction extends AbstractOpenAction implements
 				+ splitSubApplications[splitSubApplications.length - 1]
 				+ File.separator + SAStrutsConstants.CAPITALIZE_INDEX_ACTION
 				+ SAStrutsConstants.JAVA_SUFFIX;
-		String mainJavaPath = PreferencesUtil.getPreferenceStoreOfProject(
-				jspFile.getProject()).getString(
-				SAStrutsConstants.PREF_MAIN_JAVA_PATH);
 		IFile firstCandidateJavaFile = jspFile.getProject().getFile(
 				mainJavaPath + File.separator
 						+ rootPackageName.replace('.', '/') + File.separator
