@@ -149,10 +149,21 @@ public class OpenJavaAction extends AbstractOpenAction implements
 				.getAdapter(IStructuredModel.class);
 		IDOMDocument doc = ((IDOMModel) model).getDocument();
 		Element element = doc.getDocumentElement();
-		NodeList aNodeList = element
-				.getElementsByTagName(SAStrutsConstants.A_TAG);
-		for (int i = 0; i < aNodeList.getLength(); i++) {
-			Node aNode = aNodeList.item(i);
+		NodeList nodeList = null;
+		String hrefAttribute = null;
+		nodeList = element.getElementsByTagName(SAStrutsConstants.A_TAG);
+		hrefAttribute = getHrefAttribute(editor, nodeList);
+		if (StringUtil.isEmpty(hrefAttribute)) {
+			nodeList = element.getElementsByTagName(SAStrutsConstants.LINK_TAG);
+			return getHrefAttribute(editor, nodeList);
+		} else {
+			return hrefAttribute;
+		}
+	}
+
+	private String getHrefAttribute(IEditorPart editor, NodeList nodeList) {
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node aNode = nodeList.item(i);
 			String hrefAttribute = ((Element) aNode)
 					.getAttribute(SAStrutsConstants.HREF_ATTRIBUTE);
 			if (!StringUtil.isEmpty(hrefAttribute)) {
