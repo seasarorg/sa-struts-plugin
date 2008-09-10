@@ -20,7 +20,7 @@ public final class SAStrutsConstants {
 
 	public static final String PREF_WEBCONTENTS_ROOT = "WebContentsRoot";
 
-	public static final String PREF_DEFAULT_WEBCONTENTS_ROOT = "/webapp";
+	public static final String PREF_DEFAULT_WEBCONTENTS_ROOT = "/src/main/webapp";
 
 	public static final String PREF_MAIN_JAVA_PATH = "MainJavaPath";
 

@@ -4,6 +4,7 @@ SAStrutsPlugin 変更履歴
 [Improvement] JSPのs:linkタグからアクションへ飛べるようにする。 [SASTRUTS-96]
 [Improvement] View on Server機能で表示するURLのコンテキストパスを自由に指定できるようにする。 [SASTRUTS-97]
 [Improvement] ショートカットキーでView on Server機能を実行できるようにする。 [SASTRUTS-98] [Seasar-user:14814]
+[Improvement] Webapp ルートのデフォルト設定を/webappから/src/main/webappに変更する。 [SASTRUTS-99]
 
 * 0.0.8 [2008/08/11]
 [Bug] WEB-INF/view/index.jspからIndexActionへ遷移できない問題を修正しました。 [SASTRUTS-89] [seasar-dev:881]
