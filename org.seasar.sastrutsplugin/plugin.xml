@@ -37,6 +37,7 @@
          </menu>
          <action
                class="org.seasar.sastrutsplugin.action.ViewOnServerAction"
+               definitionId="org.seasar.sastrutsplugin.command.ViewOnServer"
                enablesFor="1"
                icon="icons/browser.gif"
                id="org.seasar.sastrutsplugin.object.ViewOnServerAction"
@@ -60,6 +61,11 @@
             id="org.seasar.sastrutsplugin.command.OpenJava"
             name="%JavaFileOpenAction.label">
       </command>
+      <command
+            categoryId="org.seasar.sastrutsplugin.category"
+            id="org.seasar.sastrutsplugin.command.ViewOnServer"
+            name="View on Server">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -74,6 +80,11 @@
             contextId="org.eclipse.wst.sse.ui.structuredTextEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+8">
+      </key>
+      <key
+            commandId="org.seasar.sastrutsplugin.command.ViewOnServer"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F9">
       </key>
    </extension>
    <extension
