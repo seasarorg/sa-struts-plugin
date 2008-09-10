@@ -61,6 +61,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 
 	private Text webServer;
 
+	private Text context;
+
 	public SAStrutsPropertyPage() {
 		super();
 	}
@@ -145,6 +147,13 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 			}
 		});
 
+		new Label(composite, SWT.NULL);
+		Label contextLabel = new Label(composite, SWT.NONE);
+		contextLabel.setText(Messages.PROPERTY_PAGE_CONTEXT);
+		context = new Text(composite, SWT.SINGLE | SWT.BORDER);
+		context.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		context.setText(store.getString(SAStrutsConstants.PREF_CONTEXT));
+
 		return composite;
 	}
 
@@ -219,6 +228,8 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 				conventionDiconPath.getText());
 		getPreferenceStore().setValue(SAStrutsConstants.PREF_WEBSERVER,
 				webServer.getText());
+		getPreferenceStore().setValue(SAStrutsConstants.PREF_CONTEXT,
+				context.getText());
 		return true;
 	}
 
@@ -228,6 +239,7 @@ public class SAStrutsPropertyPage extends PropertyPage implements
 		conventionDiconPath
 				.setText(SAStrutsConstants.PREF_DEFAULT_CONVENTION_DICON_PATH);
 		webServer.setText(SAStrutsConstants.PREF_DEFAULT_WEBSERVER);
+		context.setText("");
 	}
 
 }

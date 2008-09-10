@@ -49,12 +49,17 @@ public class ViewOnServerAction implements IWorkbenchWindowActionDelegate {
 				for (int i = 0; i < splitSubApplications.length - 1; i++) {
 					sb.append(splitSubApplications[i]).append("/");
 				}
+				String context = store.getString(SAStrutsConstants.PREF_CONTEXT);
+				if(StringUtil.isEmpty(context)){
+					context = resource.getProject().getName();
+				}
+				
 				path = sb.toString()
 						+ StringUtil
 								.decapitalize(splitSubApplications[splitSubApplications.length - 1]);
 				IPath p = new Path(store
 						.getString(SAStrutsConstants.PREF_WEBSERVER)).append(
-						"/").append(resource.getProject().getName())
+						"/").append(context)
 						.append("/");
 				if (!path.equals(SAStrutsConstants.INDEX)) {
 					p = p.append(path);

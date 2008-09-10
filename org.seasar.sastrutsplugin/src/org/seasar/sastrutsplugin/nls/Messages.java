@@ -72,4 +72,6 @@ public class Messages extends NLS {
 	public static String PROPERTY_PAGE_ERROR_MESSAGE_WEB_SERVER;
 
 	public static String ERROR_DIALOG_CONVENTION_DICONANALYZE_ERROR_MESSAGE;
+
+	public static String PROPERTY_PAGE_CONTEXT;
 }

@@ -34,6 +34,8 @@ public final class SAStrutsConstants {
 
 	public static final String PREF_DEFAULT_WEBSERVER = "http://localhost:8080";
 
+	public static final String PREF_CONTEXT = "Context";
+
 	public static final String ACTION = "Action";
 
 	public static final String LOWER_CASE_ACTION = "action";
