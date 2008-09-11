@@ -113,7 +113,29 @@
       <key
             commandId="org.seasar.sastrutsplugin.command.ViewSAStrutsHelp"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="F10">
+            sequence="M1+F9">
+      </key>
+      <key
+            platform="carbon"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F9">
+      </key>
+      <key
+            platform="carbon"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+F9">
+      </key>
+      <key
+            platform="carbon"
+            commandId="org.seasar.sastrutsplugin.command.ViewOnServer"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+F9">
+      </key>
+      <key
+            platform="carbon"
+            commandId="org.seasar.sastrutsplugin.command.ViewSAStrutsHelp"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+F9">
       </key>
    </extension>
    <extension
