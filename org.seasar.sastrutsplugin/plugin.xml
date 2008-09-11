@@ -27,7 +27,7 @@
       </viewerContribution>
       <objectContribution
             adaptable="true"
-            id="org.seasar.sastrutsplugin.objectContribution"
+            id="org.seasar.sastrutsplugin.objectContribution.ViewOnServer"
             nameFilter="*Action.java"
             objectClass="org.eclipse.core.resources.IFile">
          <menu
@@ -43,6 +43,25 @@
                id="org.seasar.sastrutsplugin.object.ViewOnServerAction"
                label="View on Server"
                menubarPath="org.seasar.sastrutsplugin.menu/additions"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.seasar.sastrutsplugin.objectContribution.ViewSAStrutsHelp"
+            nameFilter="*"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               id="org.seasar.sastrutsplugin.menu"
+               label="SAStruts"
+               path="additions2">
+         </menu>
+         <action
+               class="org.seasar.sastrutsplugin.action.ViewSAStrutsHelpAction"
+               definitionId="org.seasar.sastrutsplugin.command.ViewSAStrutsHelp"
+               enablesFor="1"
+               icon="icons/help_contents.gif"
+               id="org.seasar.sastrutsplugin.object.ViewSAStrutsHelpAction"
+               label="View SAStruts Help"
+               menubarPath="org.seasar.sastrutsplugin.menu/additions2"/>
       </objectContribution>
    </extension>
    <extension
@@ -66,6 +85,11 @@
             id="org.seasar.sastrutsplugin.command.ViewOnServer"
             name="View on Server">
       </command>
+      <command
+            categoryId="org.seasar.sastrutsplugin.category"
+            id="org.seasar.sastrutsplugin.command.ViewSAStrutsHelp"
+            name="View SAStruts Help">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -85,6 +109,11 @@
             commandId="org.seasar.sastrutsplugin.command.ViewOnServer"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="F9">
+      </key>
+      <key
+            commandId="org.seasar.sastrutsplugin.command.ViewSAStrutsHelp"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F10">
       </key>
    </extension>
    <extension
