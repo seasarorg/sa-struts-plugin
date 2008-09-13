@@ -47,11 +47,12 @@ import org.seasar.sastrutsplugin.naming.AutoNaming;
 import org.seasar.sastrutsplugin.naming.DefaultAutoNaming;
 import org.seasar.sastrutsplugin.nls.Messages;
 import org.seasar.sastrutsplugin.util.IDEUtil;
+import org.seasar.sastrutsplugin.util.SAStrutsUtil;
 import org.seasar.sastrutsplugin.util.StringUtil;
 import org.seasar.sastrutsplugin.wizard.JspCreationWizard;
 
-public class OpenJspAction extends AbstractOpenAction implements
-		IEditorActionDelegate, IObjectActionDelegate {
+public class OpenJspAction implements IEditorActionDelegate,
+		IObjectActionDelegate {
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
@@ -104,7 +105,8 @@ public class OpenJspAction extends AbstractOpenAction implements
 				IFile file = ((FileEditorInput) editor.getEditorInput())
 						.getFile();
 				IProject project = file.getProject();
-				String webRootViewPrefix = getWebRootViewPrefix(project);
+				String webRootViewPrefix = SAStrutsUtil
+						.getWebRootViewPrefix(project);
 				if (StringUtil.isEmpty(webRootViewPrefix)) {
 					return;
 				}
@@ -116,12 +118,13 @@ public class OpenJspAction extends AbstractOpenAction implements
 						IResource parentResource = jspFile.getParent();
 						if (!parentResource.exists()
 								&& parentResource.getType() == IResource.FOLDER) {
-							createFolderRecursively((IFolder) parentResource);
+							SAStrutsUtil
+									.createFolderRecursively((IFolder) parentResource);
 						}
 						wizard.init(PlatformUI.getWorkbench(),
 								new StructuredSelection(jspFile));
-						WizardDialog dialog = new WizardDialog(getShell(),
-								wizard);
+						WizardDialog dialog = new WizardDialog(SAStrutsUtil
+								.getShell(), wizard);
 						dialog.open();
 					}
 				} else {
@@ -167,7 +170,7 @@ public class OpenJspAction extends AbstractOpenAction implements
 	private boolean confirmCreation() {
 		String title = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_TITLE;
 		String msg = Messages.JSP_FILE_OPEN_ACTION_CREATION_CONFIRM_MESSAGE;
-		return MessageDialog.openConfirm(getShell(), title, msg);
+		return MessageDialog.openConfirm(SAStrutsUtil.getShell(), title, msg);
 	}
 
 	private static NLSLine[] createRawLines(ICompilationUnit cu) {

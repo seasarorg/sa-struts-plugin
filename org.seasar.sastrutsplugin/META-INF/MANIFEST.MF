@@ -14,7 +14,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core,
  org.eclipse.jdt.ui,
  org.eclipse.wst.sse.core,
- org.eclipse.wst.xml.core
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.sse.ui,
+ org.eclipse.jst.jsp.ui,
+ org.eclipse.wst.xml.ui,
+ org.eclipse.jst.jsp.core,
+ org.eclipse.wst.html.core
 Eclipse-LazyStart: true
 Export-Package: org.seasar.sastrutsplugin
 Bundle-Vendor: %plugin.provider
