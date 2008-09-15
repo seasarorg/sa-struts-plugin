@@ -38,6 +38,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.seasar.eclipse.common.util.LogUtil;
 import org.seasar.eclipse.common.util.WorkbenchUtil;
 import org.seasar.sastrutsplugin.Activator;
+import org.seasar.sastrutsplugin.SAStrutsConstants;
 import org.seasar.sastrutsplugin.bean.FormInfomation;
 import org.seasar.sastrutsplugin.util.HTMLUtil;
 import org.seasar.sastrutsplugin.util.JavaUtil;
@@ -105,7 +106,7 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 			if (node instanceof AttrImpl) {
 				AttrImpl attrImpl = (AttrImpl) node;
 				String attrubuteName = attrImpl.getName();
-				if (attrubuteName.equals("type")) {
+				if (attrubuteName.equals(SAStrutsConstants.TYPE)) {
 					typeAttributeValue = attrImpl.getValue();
 				}
 				int start = attrImpl.getStartOffset();
@@ -119,74 +120,76 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 
 		if (isContentAssistField(tagName, typeAttributeValue,
 				cursorPositiondAttributeName)) {
-			IType actionType = getActionType();
-			if (actionType != null) {
-				IType actionForm = null;
-				try {
-					for (IField field : actionType.getFields()) {
-						int flag = field.getFlags();
-						if ((Flags.isPublic(flag) || Flags.isProtected(flag))
-								&& !Flags.isStatic(flag)) {
-							if (isActionForm(field)) {
-								String clazz = JavaUtil.getFullQName(
-										actionType, Signature.toString(field
-												.getTypeSignature()));
-								actionForm = field.getJavaProject().findType(
-										clazz);
-							}
-						}
-					}
-					if (actionForm != null) {
-						ArrayList<IField> fields = new ArrayList<IField>();
-						for (IField field : actionForm.getFields()) {
-							int flag = field.getFlags();
-							if (Flags.isPublic(flag) && !Flags.isStatic(flag)) {
-								fields.add(field);
-							}
-						}
-						for (IField field : fields) {
-							String value = encloseDoubleQuotes(field
-									.getElementName());
-
-							contentAssistRequest
-									.addProposal(getCompletionProposal(
-											field,
-											contentAssistRequest
-													.getReplacementBeginPosition(),
-											contentAssistRequest
-													.getReplacementLength()));
-
-						}
-					}
-				} catch (JavaModelException e) {
-					LogUtil.log(Activator.getDefault(), e);
-				}
-			}
+			doContentAssistField(contentAssistRequest);
 		}
 
 		if (isContentAssistMethod(tagName, typeAttributeValue,
 				cursorPositiondAttributeName)) {
-			IType actionType = getActionType();
-			if (actionType != null) {
-				ArrayList<IMethod> executeMethods = new ArrayList<IMethod>();
-				try {
-					for (IMethod method : actionType.getMethods()) {
-						if (isExecuteMethod(method)) {
-							executeMethods.add(method);
+			doContentAssistMethod(contentAssistRequest);
+		}
+		super.addAttributeNameProposals(contentAssistRequest);
+	}
+
+	private void doContentAssistMethod(ContentAssistRequest contentAssistRequest) {
+		IType actionType = getActionType();
+		if (actionType != null) {
+			ArrayList<IMethod> executeMethods = new ArrayList<IMethod>();
+			try {
+				for (IMethod method : actionType.getMethods()) {
+					if (isExecuteMethod(method)) {
+						executeMethods.add(method);
+					}
+				}
+				for (IMethod executeMethod : executeMethods) {
+					contentAssistRequest.addProposal(getCompletionProposal(
+							executeMethod, contentAssistRequest
+									.getReplacementBeginPosition(),
+							contentAssistRequest.getReplacementLength()));
+				}
+			} catch (JavaModelException e) {
+				LogUtil.log(Activator.getDefault(), e);
+			}
+		}
+	}
+
+	private void doContentAssistField(ContentAssistRequest contentAssistRequest) {
+		IType actionType = getActionType();
+		if (actionType != null) {
+			IType actionForm = null;
+			try {
+				for (IField field : actionType.getFields()) {
+					int flag = field.getFlags();
+					if ((Flags.isPublic(flag) || Flags.isProtected(flag))
+							&& !Flags.isStatic(flag)) {
+						if (isActionForm(field)) {
+							String clazz = JavaUtil
+									.getFullQName(actionType, Signature
+											.toString(field.getTypeSignature()));
+							actionForm = field.getJavaProject().findType(clazz);
 						}
 					}
-					for (IMethod executeMethod : executeMethods) {
+				}
+				if (actionForm != null) {
+					ArrayList<IField> fields = new ArrayList<IField>();
+					for (IField field : actionForm.getFields()) {
+						int flag = field.getFlags();
+						if (Flags.isPublic(flag) && !Flags.isStatic(flag)) {
+							fields.add(field);
+						}
+					}
+					for (IField field : fields) {
+						String value = encloseDoubleQuotes(field
+								.getElementName());
 						contentAssistRequest.addProposal(getCompletionProposal(
-								executeMethod, contentAssistRequest
+								field, contentAssistRequest
 										.getReplacementBeginPosition(),
 								contentAssistRequest.getReplacementLength()));
 					}
-				} catch (JavaModelException e) {
-					LogUtil.log(Activator.getDefault(), e);
 				}
+			} catch (JavaModelException e) {
+				LogUtil.log(Activator.getDefault(), e);
 			}
 		}
-		super.addAttributeNameProposals(contentAssistRequest);
 	}
 
 	private IType getActionType() {
@@ -203,8 +206,10 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 		try {
 			int flag = method.getFlags();
 			int numberOfParameters = method.getNumberOfParameters();
-			if (Flags.isPublic(flag) && numberOfParameters == 0
-					&& hasExecuteAnnotation(method)) {
+			String returnType = Signature.toString(method.getReturnType());
+			if (Flags.isPublic(flag)
+					&& returnType.equals(SAStrutsConstants.STRING)
+					&& numberOfParameters == 0 && hasExecuteAnnotation(method)) {
 				return true;
 			}
 		} catch (JavaModelException e) {
@@ -216,7 +221,7 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 	private boolean hasExecuteAnnotation(IMethod method) {
 		try {
 			return method.getSource() == null ? false : method.getSource()
-					.indexOf("@Execute") > -1;
+					.indexOf(SAStrutsConstants.EXECUTE_ANNOTATION) > -1;
 		} catch (JavaModelException e) {
 			LogUtil.log(Activator.getDefault(), e);
 			return false;
@@ -246,7 +251,7 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 	}
 
 	private boolean isActionForm(IField field) {
-		if (field.getElementName().endsWith("Form")
+		if (field.getElementName().endsWith(SAStrutsConstants.FORM)
 				&& hasActionFormAnnotation(field)) {
 			return true;
 		} else {
@@ -257,7 +262,7 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 	private boolean hasActionFormAnnotation(IField field) {
 		try {
 			return field.getSource() == null ? false : field.getSource()
-					.indexOf("@ActionForm") > -1;
+					.indexOf(SAStrutsConstants.ACTIONFORM_ANNOTATION) > -1;
 		} catch (JavaModelException e) {
 			LogUtil.log(Activator.getDefault(), e);
 			return false;
@@ -272,16 +277,18 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 			String typeAttributeValue, String cursorPositiondAttributeName) {
 		if (strutsTagList.contains(tagName)) {
 			if (!StringUtil.isEmpty(cursorPositiondAttributeName)
-					&& cursorPositiondAttributeName.equals("property")) {
+					&& cursorPositiondAttributeName
+							.equals(SAStrutsConstants.PROPERTY)) {
 				return true;
 			}
-		} else if (tagName.equals("input")) {
+		} else if (tagName.equals(SAStrutsConstants.INPUT)) {
 			if (inputTagTypeList.contains(typeAttributeValue)) {
 				return true;
 			}
-		} else if (tagName.equals("textarea")) {
+		} else if (tagName.equals(SAStrutsConstants.TEXTAREA)) {
 			if (!StringUtil.isEmpty(cursorPositiondAttributeName)
-					&& cursorPositiondAttributeName.equals("name")) {
+					&& cursorPositiondAttributeName
+							.equals(SAStrutsConstants.NAME)) {
 				return true;
 			}
 		}
@@ -292,13 +299,15 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 			String typeAttributeValue, String cursorPositiondAttributeName) {
 		if (strutsTagButtonList.contains(tagName)) {
 			if (!StringUtil.isEmpty(cursorPositiondAttributeName)
-					&& cursorPositiondAttributeName.equals("property")) {
+					&& cursorPositiondAttributeName
+							.equals(SAStrutsConstants.PROPERTY)) {
 				return true;
 			}
-		} else if (tagName.equals("input")) {
+		} else if (tagName.equals(SAStrutsConstants.INPUT)) {
 			if (inputTagTypeButtonList.contains(typeAttributeValue)) {
 				if (!StringUtil.isEmpty(cursorPositiondAttributeName)
-						&& cursorPositiondAttributeName.equals("name")) {
+						&& cursorPositiondAttributeName
+								.equals(SAStrutsConstants.NAME)) {
 					return true;
 				}
 			}

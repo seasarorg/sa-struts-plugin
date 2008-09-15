@@ -79,9 +79,21 @@ public final class SAStrutsConstants {
 	public static final String PARAM_VALUE = "param-value";
 
 	public static final String A_TAG = "a";
-	
+
 	public static final String LINK_TAG = "s:link";
 
 	public static final String HREF_ATTRIBUTE = "href";
+
+	public static final String PROPERTY = "property";
+
+	public static final String TEXTAREA = "textarea";
+
+	public static final String FORM = "Form";
+
+	public static final String ACTIONFORM_ANNOTATION = "@ActionForm";
+
+	public static final String EXECUTE_ANNOTATION = "@Execute";
+
+	public static final String STRING = "String";
 
 }
