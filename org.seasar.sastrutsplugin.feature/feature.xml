@@ -2,7 +2,7 @@
 <feature
       id="org.seasar.sastrutsplugin.feature"
       label="%feature.name"
-      version="0.0.8"
+      version="0.0.9"
       provider-name="%feature.provider"
       plugin="org.seasar.sastrutsplugin">
 
@@ -31,7 +31,7 @@ governing permissions and limitations under the License.
          id="org.seasar.sastrutsplugin"
          download-size="0"
          install-size="0"
-         version="0.0.8"
+         version="0.0.9"
          unpack="false"/>
 
 </feature>
