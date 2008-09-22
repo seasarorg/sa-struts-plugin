@@ -282,7 +282,9 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 				return true;
 			}
 		} else if (tagName.equals(SAStrutsConstants.INPUT)) {
-			if (inputTagTypeList.contains(typeAttributeValue)) {
+			if (inputTagTypeList.contains(typeAttributeValue)
+					&& cursorPositiondAttributeName
+							.equals(SAStrutsConstants.NAME)) {
 				return true;
 			}
 		} else if (tagName.equals(SAStrutsConstants.TEXTAREA)) {
