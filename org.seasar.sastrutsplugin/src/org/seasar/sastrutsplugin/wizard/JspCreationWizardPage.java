@@ -16,6 +16,9 @@
 
 package org.seasar.sastrutsplugin.wizard;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
@@ -42,5 +45,22 @@ public class JspCreationWizardPage extends WizardNewFileCreationPage {
 
 	protected String getNewFileLabel() {
 		return Messages.WIZARD_JSP_CREATION_PAGE_NEW_FILE_LABEL;
+	}
+	
+	@Override
+	protected InputStream getInitialContents() {
+		final String lineDelim = "\n";
+		StringBuffer sb = new StringBuffer();
+		sb.append("<%@page pageEncoding=\"UTF-8\"%>");
+		sb.append(lineDelim);
+		sb.append("<html>");
+		sb.append(lineDelim);
+		sb.append("<body>");
+		sb.append(lineDelim);
+		sb.append("</body>");
+		sb.append(lineDelim);
+		sb.append("</html>");
+		InputStream is = new ByteArrayInputStream(sb.toString().getBytes());
+		return is;
 	}
 }
