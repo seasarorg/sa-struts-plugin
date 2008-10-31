@@ -69,6 +69,7 @@ public class JSPAssistProcessor extends JSPContentAssistProcessor {
 		strutsTagButtonList.add("html:button");
 		strutsTagButtonList.add("html:submit");
 		strutsTagButtonList.add("html:cancel");
+		strutsTagButtonList.add("s:submit");
 	}
 
 	private static final List<String> inputTagTypeList = new ArrayList<String>();
