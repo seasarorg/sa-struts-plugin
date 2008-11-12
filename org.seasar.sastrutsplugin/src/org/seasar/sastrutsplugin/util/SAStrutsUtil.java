@@ -414,20 +414,21 @@ public class SAStrutsUtil {
 		Element element = doc.getDocumentElement();
 		NodeList contextParamNodeList = element
 				.getElementsByTagName(SAStrutsConstants.CONTEXT_PARAM);
-		if (contextParamNodeList.getLength() == 1
-				&& contextParamNodeList.item(0) instanceof Element) {
-			Element contextParamElement = (Element) contextParamNodeList
-					.item(0);
-			NodeList paramNameNodeList = contextParamElement
-					.getElementsByTagName(SAStrutsConstants.PARAM_NAME);
-			if (paramNameNodeList.getLength() == 1) {
-				if (((Node) paramNameNodeList.item(0)).getTextContent().equals(
-						SAStrutsConstants.SASTRUTS_VIEW_PREFIX)) {
-					NodeList paramValueNodeList = contextParamElement
-							.getElementsByTagName(SAStrutsConstants.PARAM_VALUE);
-					if (paramValueNodeList.getLength() == 1) {
-						return ((Node) paramValueNodeList.item(0))
-								.getTextContent();
+		for (int i = 0; i < contextParamNodeList.getLength(); i++) {
+			if (contextParamNodeList.item(i) instanceof Element) {
+				Element contextParamElement = (Element) contextParamNodeList
+						.item(i);
+				NodeList paramNameNodeList = contextParamElement
+						.getElementsByTagName(SAStrutsConstants.PARAM_NAME);
+				if (paramNameNodeList.getLength() == 1) {
+					if (((Node) paramNameNodeList.item(0)).getTextContent()
+							.equals(SAStrutsConstants.SASTRUTS_VIEW_PREFIX)) {
+						NodeList paramValueNodeList = contextParamElement
+								.getElementsByTagName(SAStrutsConstants.PARAM_VALUE);
+						if (paramValueNodeList.getLength() == 1) {
+							return ((Node) paramValueNodeList.item(0))
+									.getTextContent();
+						}
 					}
 				}
 			}
