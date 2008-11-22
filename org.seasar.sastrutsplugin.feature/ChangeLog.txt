@@ -1,5 +1,8 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.12 [2008/11/22]
+[Bug] web.xml に context-param 定義を複数すると、 Ctrl+8 で Action から JSP にジャンプできない問題を修正しました。 [SASTRUTS-110] [Seasar-user:16275]
+
 * 0.0.11 [2008/10/31]
 [Improvement] JSPの雛形を作成する。 [SASTRUTS-107]
 [Improvement] s:submitタグのproperty属性の補完対応 [SASTRUTS-109]
