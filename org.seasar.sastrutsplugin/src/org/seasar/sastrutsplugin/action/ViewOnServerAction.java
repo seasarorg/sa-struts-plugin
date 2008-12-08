@@ -51,7 +51,7 @@ public class ViewOnServerAction implements IWorkbenchWindowActionDelegate {
 			IPreferenceStore store = PreferencesUtil
 					.getPreferenceStoreOfProject(project);
 			int lastIndexOfLowerCaseAction = actionFilePath
-					.lastIndexOf(SAStrutsConstants.LOWER_CASE_ACTION);
+					.lastIndexOf(SAStrutsConstants.LOWER_CASE_ACTION + File.separator);
 			int lastIndexOfAction = actionFilePath
 					.lastIndexOf(SAStrutsConstants.ACTION);
 			if (lastIndexOfLowerCaseAction != -1 && lastIndexOfAction != -1) {
