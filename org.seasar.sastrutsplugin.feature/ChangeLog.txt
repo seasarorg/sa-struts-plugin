@@ -1,5 +1,8 @@
 SAStrutsPlugin 変更履歴
 
+* 0.0.13 [2008/12/12]
+[Bug] Actionのクラス名にactionが入っているときのView On Serverがおかしい問題を修正しました。 [SASTRUTS-112] [Seasar-user:16459]
+
 * 0.0.12 [2008/11/22]
 [Bug] web.xml に context-param 定義を複数すると、 Ctrl+8 で Action から JSP にジャンプできない問題を修正しました。 [SASTRUTS-110] [Seasar-user:16275]
 
